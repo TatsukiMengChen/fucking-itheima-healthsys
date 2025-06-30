@@ -11,80 +11,83 @@
 **目标**: 搭建项目骨架，配置构建工具和核心依赖，确保基础环境就绪。
 
 * **任务 1.1: 初始化Gradle项目**
-    * [ ] 创建一个新的Java项目。
-    * [ ] 初始化为Gradle项目，生成 `build.gradle` 和 `settings.gradle` 文件。
-    * [ ] 在 `build.gradle` 中设置 `group 'com.healthsys'` 和 `version '1.0-SNAPSHOT'`。
+    * [x] 创建一个新的Java项目。
+    * [x] 初始化为Gradle项目，生成 `build.gradle` 和 `settings.gradle` 文件。
+    * [x] 在 `build.gradle` 中设置 `group 'com.healthsys'` 和 `version '1.0-SNAPSHOT'`。
 
 * **任务 1.2: 配置 `build.gradle` 依赖**
-    * [ ] 添加 `mavenCentral()` 作为仓库。
-    * [ ] 参照文档第7节 (技术栈) 和 `build.gradle` 示例，添加以下核心依赖：
-        * [ ] **GUI**: `com.formdev:flatlaf` (现代外观库)
-        * [ ] **数据库**: `org.postgresql:postgresql` (PostgreSQL JDBC驱动)
-        * [ ] **ORM**: `com.baomidou:mybatis-plus-core`, `mybatis-plus-extension`, `mybatis-plus-annotation` (或对应非SpringBoot版本依赖), `org.mybatis:mybatis`
-        * [ ] **工具库**: `cn.hutool:hutool-all`
-        * [ ] **日志**: `org.slf4j:slf4j-api` 和 `ch.qos.logback:logback-classic`
-        * [ ] **邮件**: `com.sun.mail:jakarta.mail`
-        * [ ] **测试**: `org.junit.jupiter:junit-jupiter-api` 和 `junit-jupiter-engine`
-    * [ ] 配置 `jar` 任务，指定主类 `com.healthsys.HealthApp` 并设置打包策略，如示例所示。
+    * [x] 添加 `mavenCentral()` 作为仓库。
+    * [x] 参照文档第7节 (技术栈) 和 `build.gradle` 示例，添加以下核心依赖：
+        * [x] **GUI**: `com.formdev:flatlaf` (现代外观库)
+        * [x] **数据库**: `org.postgresql:postgresql` (PostgreSQL JDBC驱动)
+        * [x] **ORM**: `com.baomidou:mybatis-plus-core`, `mybatis-plus-extension`, `mybatis-plus-annotation` (或对应非SpringBoot版本依赖), `org.mybatis:mybatis`
+        * [x] **工具库**: `cn.hutool:hutool-all`
+        * [x] **日志**: `org.slf4j:slf4j-api` 和 `ch.qos.logback:logback-classic`
+        * [x] **邮件**: `com.sun.mail:jakarta.mail`
+        * [x] **测试**: `org.junit.jupiter:junit-jupiter-api` 和 `junit-jupiter-engine`
+    * [x] 配置 `jar` 任务，指定主类 `com.healthsys.HealthApp` 并设置打包策略，如示例所示。
 
 * **任务 1.3: 创建项目目录结构**
-    * [ ] 严格按照文档第8节定义的目录结构，在 `src/main/java/com/healthsys/` 下创建所有包 (package)，例如：`config`, `model`, `dao`, `service`, `view`, `viewmodel`, `util` 等。
-    * [ ] 在 `src/main/resources` 下创建 `mapper`, `images` 目录，并创建 `application.properties` 和 `mybatis-config.xml` 文件。
+    * [x] 严格按照文档第8节定义的目录结构，在 `src/main/java/com/healthsys/` 下创建所有包 (package)，例如：`config`, `model`, `dao`, `service`, `view`, `viewmodel`, `util` 等。
+    * [x] 在 `src/main/resources` 下创建 `mapper`, `images` 目录，并创建 `application.properties` 和 `mybatis-config.xml` 文件。
 
 * **任务 1.4: 数据库环境准备**
-    * [ ] 启动PostgreSQL数据库服务。
-    * [ ] 创建一个名为 `health_management_system` (或自定义) 的新数据库。
-    * [ ] 参照文档第6节，依次执行SQL `CREATE TABLE` 语句，创建以下所有表：
-        * [ ] `users`
-        * [ ] `check_items`
-        * [ ] `check_groups`
-        * [ ] `group_check_item`
-        * [ ] `appointments`
-        * [ ] `examination_results`
-        * [ ] `medical_history`
-    * [ ] 确保所有字段、类型、约束（主键、外键、非空）与文档完全一致。
+    * [x] 启动PostgreSQL数据库服务。
+    * [x] 创建一个名为 `health_management_system` (或自定义) 的新数据库。
+    * [x] 参照文档第6节，依次执行SQL `CREATE TABLE` 语句，创建以下所有表：
+        * [x] `users`
+        * [x] `check_items`
+        * [x] `check_groups`
+        * [x] `group_check_item`
+        * [x] `appointments`
+        * [x] `examination_results`
+        * [x] `medical_history`
+    * [x] 确保所有字段、类型、约束（主键、外键、非空）与文档完全一致。
 
 * **任务 1.5: 应用入口与基础配置**
-    * [ ] 在 `com.healthsys.config` 包中创建 `DatabaseConfig.java` 和 `MybatisPlusConfig.java`。
-        * [ ] `DatabaseConfig`: 负责创建数据源 (DataSource)，连接信息从 `application.properties` 读取。
-        * [ ] `MybatisPlusConfig`: 配置Mybatis-Plus，如扫描Mapper接口、分页插件等。
-    * [ ] 在 `application.properties` 文件中配置数据库连接信息（URL, username, password）和邮件服务信息。
-    * [ ] 在 `com.healthsys` 包中创建主入口类 `HealthApp.java`。
-    * [ ] 在 `HealthApp.main` 方法中，按照文档末尾的示例，添加代码以初始化并设置 **FlatLaf** 外观 (`UIManager.setLookAndFeel(new FlatDarkLaf());`)。
-    * [ ] 在 `com.healthsys.view` 包中创建主窗口类 `MainFrame.java` (继承自 `JFrame`)。
-    * [ ] 在 `HealthApp.main` 方法的 `SwingUtilities.invokeLater` 中，实例化并显示 `MainFrame`。
+    * [x] 在 `com.healthsys.config` 包中创建 `DatabaseConfig.java` 和 `MybatisPlusConfig.java`。
+        * [x] `DatabaseConfig`: 负责创建数据源 (DataSource)，连接信息从 `application.properties` 读取。
+        * [x] `MybatisPlusConfig`: 配置Mybatis-Plus，如扫描Mapper接口、分页插件等。
+    * [x] 在 `application.properties` 文件中配置数据库连接信息（URL, username, password）和邮件服务信息。
+    * [x] 在 `com.healthsys` 包中创建主入口类 `HealthApp.java`。
+    * [x] 在 `HealthApp.main` 方法中，按照文档末尾的示例，添加代码以初始化并设置 **FlatLaf** 外观 (`UIManager.setLookAndFeel(new FlatDarkLaf());`)。
+    * [x] 在 `com.healthsys.view` 包中创建主窗口类 `MainFrame.java` (继承自 `JFrame`)。
+    * [x] 在 `HealthApp.main` 方法的 `SwingUtilities.invokeLater` 中，实例化并显示 `MainFrame`。
 
 ### **阶段二：模型与数据访问层开发 (Phase 2: Model & DAO Layer)**
 
 **目标**: 创建与数据库表对应的实体类和Mybatis-Plus Mapper接口。
 
 * **任务 2.1: 创建实体类 (POJOs)**
-    * [ ] 在 `com.healthsys.model.entity` 包中，为每一个数据库表创建一个Java实体类。
-    * [ ] `User.java`
-    * [ ] `CheckItem.java`
-    * [ ] `CheckGroup.java`
-    * [ ] `Appointment.java`
-    * [ ] `ExaminationResult.java`
-    * [ ] `MedicalHistory.java`
-    * [ ] 使用Mybatis-Plus注解 (`@TableName`, `@TableId`, `@TableField`) 映射类和字段到数据库表和列。
+    * [x] 在 `com.healthsys.model.entity` 包中，为每一个数据库表创建一个Java实体类。
+    * [x] `User.java`
+    * [x] `CheckItem.java`
+    * [x] `CheckGroup.java`
+    * [x] `Appointment.java`
+    * [x] `ExaminationResult.java`
+    * [x] `MedicalHistory.java`
+    * [x] 使用Mybatis-Plus注解 (`@TableName`, `@TableId`, `@TableField`) 映射类和字段到数据库表和列。
 
 * **任务 2.2: 创建枚举类**
-    * [ ] 在 `com.healthsys.model.enums` 包中创建 `UserRoleEnum.java`，包含 `NORMAL_USER`, `ADMIN`, `SUPER_ADMIN`。
+    * [x] 在 `com.healthsys.model.enums` 包中创建 `UserRoleEnum.java`，包含 `NORMAL_USER`, `ADMIN`, `SUPER_ADMIN`。
 
 * **任务 2.3: 创建数据访问接口 (Mappers)**
-    * [ ] 在 `com.healthsys.dao` 包中，为每个实体类创建一个Mapper接口，并继承 `BaseMapper<EntityType>`。
-    * [ ] `UserMapper.java`
-    * [ ] `CheckItemMapper.java`
-    * [ ] `CheckGroupMapper.java`
-    * [ ] `AppointmentMapper.java`
-    * [ ] `ExaminationResultMapper.java`
-    * [ ] `MedicalHistoryMapper.java`
-    * [ ] 在 `MybatisPlusConfig` 中或使用 `@MapperScan` 注解确保这些Mapper被扫描到。
+    * [x] 在 `com.healthsys.dao` 包中，为每个实体类创建一个Mapper接口，并继承 `BaseMapper<EntityType>`。
+    * [x] `UserMapper.java`
+    * [x] `CheckItemMapper.java`
+    * [x] `CheckGroupMapper.java`
+    * [x] `AppointmentMapper.java`
+    * [x] `ExaminationResultMapper.java`
+    * [x] `MedicalHistoryMapper.java`
+    * [x] 在 `MybatisPlusConfig` 中或使用 `@MapperScan` 注解确保这些Mapper被扫描到。
 
 * **任务 2.4: 创建工具类**
-    * [ ] 在 `com.healthsys.util` 包中创建以下工具类：
-        * [ ] `PasswordUtil.java`: 封装Hutool的 `SecureUtil`，提供密码哈希和验证的方法。
-        * [ ] `ValidationUtil.java`: 封装Hutool的 `Validator`，提供常用的数据校验方法（如邮箱、非空）。
+    * [x] 在 `com.healthsys.util` 包中创建以下工具类：
+        * [x] `PasswordUtil.java`: 封装Hutool的 `SecureUtil`，提供密码哈希和验证的方法。
+        * [x] `ValidationUtil.java`: 封装Hutool的 `Validator`，提供常用的数据校验方法（如邮箱、非空）。
+        * [x] `GuiUtil.java`: Swing界面相关工具方法。
+        * [x] `DateUtil.java`: 日期处理工具（基于Hutool）。
+        * [x] `CommonUtil.java`: 通用工具方法。
 
 ### **阶段三：认证模块开发 (Phase 3: Authentication Module)**
 
