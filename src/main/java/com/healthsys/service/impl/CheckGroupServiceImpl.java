@@ -388,4 +388,20 @@ public class CheckGroupServiceImpl implements ICheckGroupService {
       return 0;
     }
   }
+
+  @Override
+  public String getCheckGroupNameById(Integer groupId) {
+    try {
+      if (groupId == null) {
+        return null;
+      }
+
+      CheckGroup checkGroup = checkGroupMapper.selectById(groupId);
+      return checkGroup != null ? checkGroup.getGroupName() : null;
+
+    } catch (Exception e) {
+      logger.error("根据ID获取检查组名称失败：groupId={}", groupId, e);
+      return null;
+    }
+  }
 }

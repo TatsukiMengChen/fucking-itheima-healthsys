@@ -40,6 +40,7 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
   private JButton confirmButton;
   private JButton completeButton;
   private JButton cancelButton;
+  private JButton dataEntryButton;
 
   // 状态标签
   private JLabel statusLabel;
@@ -116,6 +117,12 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
     cancelButton = new JButton("取消预约");
     cancelButton.setPreferredSize(new Dimension(100, 30));
     cancelButton.setEnabled(false);
+
+    dataEntryButton = new JButton("录入体检数据");
+    dataEntryButton.setPreferredSize(new Dimension(120, 30));
+    dataEntryButton.setBackground(new Color(255, 193, 7));
+    dataEntryButton.setForeground(Color.BLACK);
+    dataEntryButton.setEnabled(false);
 
     // 状态标签
     statusLabel = new JLabel("就绪");
@@ -215,6 +222,8 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
     panel.add(confirmButton);
     panel.add(completeButton);
     panel.add(cancelButton);
+    panel.add(Box.createHorizontalStrut(10));
+    panel.add(dataEntryButton);
 
     return panel;
   }
@@ -279,6 +288,14 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
       @Override
       public void actionPerformed(ActionEvent e) {
         updateSelectedAppointmentStatus("已取消");
+      }
+    });
+
+    // 录入体检数据按钮事件
+    dataEntryButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        navigateToHealthDataEntry();
       }
     });
 
@@ -363,10 +380,12 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
       confirmButton.setEnabled("待确认".equals(status));
       completeButton.setEnabled("已确认".equals(status));
       cancelButton.setEnabled("待确认".equals(status) || "已确认".equals(status));
+      dataEntryButton.setEnabled("已完成".equals(status));
     } else {
       confirmButton.setEnabled(false);
       completeButton.setEnabled(false);
       cancelButton.setEnabled(false);
+      dataEntryButton.setEnabled(false);
     }
   }
 
@@ -385,6 +404,23 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
     }
 
     return null;
+  }
+
+  /**
+   * 跳转到健康数据录入页面
+   */
+  private void navigateToHealthDataEntry() {
+    Appointment selectedAppointment = getSelectedAppointment();
+    if (selectedAppointment == null) {
+      JOptionPane.showMessageDialog(this,
+          "请先选择一个预约记录",
+          "提示",
+          JOptionPane.INFORMATION_MESSAGE);
+      return;
+    }
+
+    // 调用ViewModel的跳转命令
+    viewModel.navigateToHealthDataEntryCommand(selectedAppointment);
   }
 
   @Override
@@ -415,6 +451,7 @@ public class AdminAppointmentTableComponent extends JPanel implements PropertyCh
             confirmButton.setEnabled(false);
             completeButton.setEnabled(false);
             cancelButton.setEnabled(false);
+            dataEntryButton.setEnabled(false);
           }
           break;
         case "statusMessage":

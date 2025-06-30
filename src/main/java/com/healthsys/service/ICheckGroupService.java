@@ -138,4 +138,12 @@ public interface ICheckGroupService {
    * @return 启用的检查组数量
    */
   int countActiveCheckGroups();
+
+  /**
+   * 根据检查组ID获取检查组名称
+   * 
+   * @param groupId 检查组ID
+   * @return 检查组名称
+   */
+  String getCheckGroupNameById(Integer groupId);
 }

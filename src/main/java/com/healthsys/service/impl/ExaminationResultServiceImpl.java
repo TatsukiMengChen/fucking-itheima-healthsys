@@ -182,4 +182,51 @@ public class ExaminationResultServiceImpl implements IExaminationResultService {
       return null;
     }
   }
+
+  @Override
+  public boolean batchSaveExaminationResults(List<ExaminationResult> results) {
+    if (results == null || results.isEmpty()) {
+      logger.warn("批量保存体检结果失败：结果列表为空");
+      return false;
+    }
+
+    try {
+      // 验证数据
+      for (ExaminationResult result : results) {
+        if (result.getAppointmentId() == null || result.getUserId() == null ||
+            result.getItemId() == null || result.getMeasuredValue() == null) {
+          logger.error("批量保存体检结果失败：存在无效数据 - appointmentId={}, userId={}, itemId={}, measuredValue={}",
+              result.getAppointmentId(), result.getUserId(), result.getItemId(), result.getMeasuredValue());
+          return false;
+        }
+      }
+
+      // 批量保存
+      int successCount = 0;
+      for (ExaminationResult result : results) {
+        // 设置创建时间
+        if (result.getRecordedAt() == null) {
+          result.setRecordedAt(LocalDateTime.now());
+        }
+
+        int insertResult = examinationResultMapper.insert(result);
+        if (insertResult > 0) {
+          successCount++;
+        }
+      }
+
+      boolean allSuccess = successCount == results.size();
+      if (allSuccess) {
+        logger.info("批量保存体检结果成功：共保存 {} 条记录", successCount);
+      } else {
+        logger.warn("批量保存体检结果部分成功：成功 {} 条，总计 {} 条", successCount, results.size());
+      }
+
+      return allSuccess;
+
+    } catch (Exception e) {
+      logger.error("批量保存体检结果失败", e);
+      return false;
+    }
+  }
 }

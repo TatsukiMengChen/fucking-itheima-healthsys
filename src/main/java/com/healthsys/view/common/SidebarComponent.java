@@ -92,9 +92,7 @@ public class SidebarComponent extends JPanel {
   private void setupStyles() {
     setPreferredSize(new Dimension(200, 0));
     setBackground(UIManager.getColor("Panel.background"));
-    setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(0, 0, 0, 1, Color.GRAY),
-        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+    setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.GRAY));
   }
 
   /**
@@ -128,38 +126,37 @@ public class SidebarComponent extends JPanel {
   private void addNavigationByRole(UserRoleEnum userRole) {
     switch (userRole) {
       case NORMAL_USER:
-        addSectionTitle("系统功能");
+        // 普通用户功能
         addUserNavigationButtons();
+        addSeparator();
+        addCommonNavigationButtons();
         break;
+
       case ADMIN:
-        addSectionTitle("系统功能");
+        // 基本功能
         addUserNavigationButtons();
-        add(Box.createRigidArea(new Dimension(0, 10)));
-        addSectionTitle("管理功能");
+        addSeparator();
+        // 管理功能
         addAdminOnlyNavigationButtons();
+        addSeparator();
+        // 系统功能
+        addCommonNavigationButtons();
         break;
+
       case SUPER_ADMIN:
-        addSectionTitle("系统功能");
+        // 基本功能
         addUserNavigationButtons();
-        add(Box.createRigidArea(new Dimension(0, 10)));
-        addSectionTitle("管理功能");
+        addSeparator();
+        // 管理功能
         addAdminOnlyNavigationButtons();
-        add(Box.createRigidArea(new Dimension(0, 10)));
-        addSectionTitle("系统管理");
+        addSeparator();
+        // 系统管理功能
         addSuperAdminOnlyNavigationButtons();
+        addSeparator();
+        // 系统功能
+        addCommonNavigationButtons();
         break;
     }
-
-    // 添加弹性空间，将系统设置功能推到底部
-    add(Box.createVerticalGlue());
-
-    // 添加分隔线
-    add(new JSeparator());
-    add(Box.createRigidArea(new Dimension(0, 5)));
-
-    // 添加系统设置功能
-    addSectionTitle("系统设置");
-    addCommonNavigationButtons();
   }
 
   /**
@@ -167,8 +164,6 @@ public class SidebarComponent extends JPanel {
    */
   private void addUserNavigationButtons() {
     addNavigationButton("预约管理", "appointment", "add");
-    addNavigationButton("健康跟踪", "tracking", "refresh");
-    addNavigationButton("体检结果", "analysis", "search");
     addNavigationButton("健康数据", "userdata", "user");
   }
 
@@ -265,11 +260,22 @@ public class SidebarComponent extends JPanel {
    */
   private void addSectionTitle(String title) {
     JLabel sectionLabel = new JLabel(title);
-    sectionLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+    sectionLabel.setFont(new Font("微软雅黑", Font.BOLD, 12));
     sectionLabel.setForeground(Color.GRAY);
     sectionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     sectionLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
     add(sectionLabel);
+  }
+
+  /**
+   * 添加分隔线
+   */
+  private void addSeparator() {
+    add(Box.createRigidArea(new Dimension(0, 10)));
+    JSeparator separator = new JSeparator();
+    separator.setMaximumSize(new Dimension(180, 1));
+    add(separator);
+    add(Box.createRigidArea(new Dimension(0, 10)));
   }
 
   /**

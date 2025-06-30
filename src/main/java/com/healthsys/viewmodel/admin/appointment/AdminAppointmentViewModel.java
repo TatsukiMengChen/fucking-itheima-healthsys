@@ -3,12 +3,14 @@ package com.healthsys.viewmodel.admin.appointment;
 import com.healthsys.model.entity.Appointment;
 import com.healthsys.model.entity.CheckGroup;
 import com.healthsys.model.entity.User;
+import com.healthsys.model.enums.UserRoleEnum;
 import com.healthsys.service.IAppointmentService;
 import com.healthsys.service.ICheckGroupService;
 import com.healthsys.dao.UserMapper;
 import com.healthsys.service.impl.AppointmentServiceImpl;
 import com.healthsys.service.impl.CheckGroupServiceImpl;
 import com.healthsys.config.DataAccessManager;
+import com.healthsys.config.AppContext;
 import com.healthsys.viewmodel.base.BaseViewModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +54,16 @@ public class AdminAppointmentViewModel extends BaseViewModel {
   private boolean isLoading;
   private String statusMessage;
 
+  // 页面跳转回调
+  private NavigationCallback navigationCallback;
+
   // 预约状态选项
   private final String[] appointmentStatuses = { "全部", "待确认", "已确认", "已完成", "已取消" };
+
+  // 页面跳转回调接口
+  public interface NavigationCallback {
+    void navigateToHealthDataEntry(com.healthsys.model.entity.Appointment appointment);
+  }
 
   public AdminAppointmentViewModel() {
     this.appointmentService = new AppointmentServiceImpl();
@@ -65,6 +75,12 @@ public class AdminAppointmentViewModel extends BaseViewModel {
     this.searchKeyword = "";
     this.selectedStatus = "全部";
     this.selectedDateRange = "全部";
+
+    User currentUser = AppContext.getCurrentUser();
+    if (currentUser != null) {
+      logger.info("管理员预约管理ViewModel初始化，当前用户: {} ({})",
+          currentUser.getUsername(), currentUser.getRole());
+    }
 
     // 初始化数据
     initialize();
@@ -354,5 +370,31 @@ public class AdminAppointmentViewModel extends BaseViewModel {
 
   public String[] getAppointmentStatuses() {
     return appointmentStatuses;
+  }
+
+  /**
+   * 设置页面跳转回调
+   */
+  public void setNavigationCallback(NavigationCallback callback) {
+    this.navigationCallback = callback;
+  }
+
+  /**
+   * 跳转到健康数据录入页面命令
+   */
+  public void navigateToHealthDataEntryCommand(Appointment appointment) {
+    if (navigationCallback != null && appointment != null) {
+      if (!"已完成".equals(appointment.getStatus())) {
+        logger.warn("尝试为非已完成状态的预约录入数据: {}", appointment.getAppointmentId());
+        setStatusMessage("只能为已完成的预约录入体检数据");
+        return;
+      }
+
+      logger.info("跳转到健康数据录入页面，预约ID: {}", appointment.getAppointmentId());
+      navigationCallback.navigateToHealthDataEntry(appointment);
+    } else {
+      logger.warn("导航回调未设置或预约对象为空");
+      setStatusMessage("页面跳转失败，请重试");
+    }
   }
 }

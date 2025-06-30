@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +32,8 @@ import com.healthsys.view.auth.AuthPanel;
 import com.healthsys.view.common.HeaderComponent;
 import com.healthsys.view.common.SidebarComponent;
 import com.healthsys.view.settings.SystemSettingsPanel;
-import com.healthsys.view.user.analysis.ResultAnalysisPanel;
 import com.healthsys.view.user.appointment.AppointmentPanel;
 import com.healthsys.view.user.healthdata.UserHealthDataPanel;
-import com.healthsys.view.user.tracking.HealthTrackingPanel;
 import com.healthsys.viewmodel.admin.usermanagement.UserManagementViewModel;
 import com.healthsys.viewmodel.auth.AuthViewModel;
 
@@ -71,8 +70,6 @@ public class MainFrame extends JFrame {
 
   // 页面面板缓存
   private AppointmentPanel appointmentPanel;
-  private HealthTrackingPanel healthTrackingPanel;
-  private ResultAnalysisPanel resultAnalysisPanel;
   private UserHealthDataPanel userHealthDataPanel;
   private AdminAppointmentManagementPanel adminAppointmentManagementPanel;
   private CheckItemManagementPanel checkItemManagementPanel;
@@ -276,9 +273,16 @@ public class MainFrame extends JFrame {
       // 显示默认的主页面
       showDefaultMainPage();
 
+      // 为侧边栏添加滚动支持
+      JScrollPane sidebarScrollPane = new JScrollPane(sidebarComponent);
+      sidebarScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+      sidebarScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      sidebarScrollPane.setBorder(null);
+      sidebarScrollPane.setPreferredSize(new Dimension(200, 0));
+
       // 布局主应用面板
       mainAppPanel.add(headerComponent, BorderLayout.NORTH);
-      mainAppPanel.add(sidebarComponent, BorderLayout.WEST);
+      mainAppPanel.add(sidebarScrollPane, BorderLayout.WEST);
       mainAppPanel.add(mainContentPanel, BorderLayout.CENTER);
 
       // 设置当前视图
@@ -311,14 +315,6 @@ public class MainFrame extends JFrame {
         case "appointment":
           setMainContent(getAppointmentPanel());
           setTitle("健康管理系统 - 预约管理");
-          break;
-        case "tracking":
-          setMainContent(getHealthTrackingPanel());
-          setTitle("健康管理系统 - 健康跟踪");
-          break;
-        case "analysis":
-          setMainContent(getResultAnalysisPanel());
-          setTitle("健康管理系统 - 体检结果分析");
           break;
         case "userdata":
           setMainContent(getUserHealthDataPanel());
@@ -356,6 +352,40 @@ public class MainFrame extends JFrame {
       }
     } catch (Exception e) {
       logger.error("处理导航失败: {}", targetPanel, e);
+      JOptionPane.showMessageDialog(this,
+          "页面切换失败：" + e.getMessage(),
+          "错误",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  /**
+   * 处理带参数的导航请求
+   * 支持从预约管理跳转到健康数据管理页面进行批量录入
+   */
+  public void handleNavigationWithAppointment(String targetPanel, com.healthsys.model.entity.Appointment appointment) {
+    logger.info("带参数导航到: {}, 预约ID: {}", targetPanel, appointment != null ? appointment.getAppointmentId() : "null");
+
+    try {
+      switch (targetPanel) {
+        case "userdata":
+          // 获取或创建用户健康数据面板
+          UserHealthDataPanel healthDataPanel = (UserHealthDataPanel) getUserHealthDataPanel();
+
+          // 设置批量录入模式
+          healthDataPanel.enterBatchEntryMode(appointment);
+
+          // 设置面板内容
+          setMainContent(healthDataPanel);
+          setTitle("健康管理系统 - 体检数据录入");
+          break;
+        default:
+          logger.warn("不支持的带参数导航目标: {}", targetPanel);
+          handleNavigation(targetPanel);
+          break;
+      }
+    } catch (Exception e) {
+      logger.error("处理带参数导航失败: {}", targetPanel, e);
       JOptionPane.showMessageDialog(this,
           "页面切换失败：" + e.getMessage(),
           "错误",
@@ -534,26 +564,6 @@ public class MainFrame extends JFrame {
   }
 
   /**
-   * 获取健康跟踪面板（懒加载）
-   */
-  private JPanel getHealthTrackingPanel() {
-    if (healthTrackingPanel == null) {
-      healthTrackingPanel = new HealthTrackingPanel();
-    }
-    return healthTrackingPanel;
-  }
-
-  /**
-   * 获取体检结果分析面板（懒加载）
-   */
-  private JPanel getResultAnalysisPanel() {
-    if (resultAnalysisPanel == null) {
-      resultAnalysisPanel = new ResultAnalysisPanel();
-    }
-    return resultAnalysisPanel;
-  }
-
-  /**
    * 获取用户健康数据面板（懒加载）
    */
   private JPanel getUserHealthDataPanel() {
@@ -569,6 +579,11 @@ public class MainFrame extends JFrame {
   private JPanel getAdminAppointmentManagementPanel() {
     if (adminAppointmentManagementPanel == null) {
       adminAppointmentManagementPanel = new AdminAppointmentManagementPanel();
+
+      // 设置导航回调
+      adminAppointmentManagementPanel.setNavigationCallback(appointment -> {
+        handleNavigationWithAppointment("userdata", appointment);
+      });
     }
     return adminAppointmentManagementPanel;
   }
@@ -630,8 +645,6 @@ public class MainFrame extends JFrame {
 
       // 清理面板缓存
       appointmentPanel = null;
-      healthTrackingPanel = null;
-      resultAnalysisPanel = null;
       userHealthDataPanel = null;
       adminAppointmentManagementPanel = null;
       checkItemManagementPanel = null;

@@ -243,6 +243,15 @@ public class AdminAppointmentManagementPanel extends JPanel implements PropertyC
     return viewModel;
   }
 
+  /**
+   * 设置页面导航回调
+   * 
+   * @param navigationCallback 导航回调接口
+   */
+  public void setNavigationCallback(AdminAppointmentViewModel.NavigationCallback navigationCallback) {
+    viewModel.setNavigationCallback(navigationCallback);
+  }
+
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     SwingUtilities.invokeLater(() -> {

@@ -1,51 +1,39 @@
 package com.healthsys.view.user.healthdata;
 
-import com.healthsys.view.base.BasePanel;
-import com.healthsys.viewmodel.user.healthdata.UserHealthDataViewModel;
 import com.healthsys.model.entity.ExaminationResult;
+import com.healthsys.view.base.BasePanel;
+import com.healthsys.view.user.healthdata.component.SingleExaminationDataEntryDialog;
+import com.healthsys.view.user.healthdata.component.UserHealthDataTableComponent;
+import com.healthsys.view.user.healthdata.component.UserHealthDataSearchComponent;
+import com.healthsys.view.user.healthdata.component.UserHealthDataToolbarComponent;
+import com.healthsys.viewmodel.user.healthdata.UserHealthDataViewModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
- * 用户健康数据管理主面板
- * 管理用户自主录入的健康数据
+ * 用户健康数据管理面板
+ * 重构后的简化版本，使用组件化设计
  * 
  * @author AI Assistant
  */
 public class UserHealthDataPanel extends BasePanel {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserHealthDataPanel.class);
+
   private UserHealthDataViewModel viewModel;
 
-  // UI组件
-  private JTable dataTable;
-  private DefaultTableModel tableModel;
-  private JScrollPane scrollPane;
+  // 子组件
+  private UserHealthDataSearchComponent searchComponent;
+  private UserHealthDataTableComponent tableComponent;
+  private UserHealthDataToolbarComponent toolbarComponent;
 
-  // 搜索和筛选组件
-  private JTextField searchField;
-  private JButton searchButton;
-  private JButton clearButton;
-  private JComboBox<String> dateRangeCombo;
-
-  // 操作按钮
-  private JButton addButton;
-  private JButton editButton;
-  private JButton deleteButton;
-  private JButton refreshButton;
-
-  // 状态标签
-  private JLabel statusLabel;
-
-  // 表格列名
-  private final String[] columnNames = {
-      "记录ID", "检查项", "测量值", "参考值", "备注", "记录时间"
-  };
+  // 管理员录入模式相关
+  private boolean isAdminEntryMode = false;
+  private com.healthsys.model.entity.Appointment currentAppointment;
 
   public UserHealthDataPanel() {
     initializeViewModel();
@@ -53,8 +41,7 @@ public class UserHealthDataPanel extends BasePanel {
     setupLayout();
     bindEvents();
 
-    // 初始化数据
-    viewModel.initialize();
+    logger.info("用户健康数据管理面板初始化完成");
   }
 
   /**
@@ -68,229 +55,108 @@ public class UserHealthDataPanel extends BasePanel {
    * 初始化组件
    */
   private void initializeComponents() {
-    // 创建表格模型
-    tableModel = new DefaultTableModel(columnNames, 0) {
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return false; // 表格不可编辑
-      }
-    };
-
-    // 创建表格
-    dataTable = new JTable(tableModel);
-    dataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    dataTable.setRowHeight(25);
-    dataTable.getTableHeader().setReorderingAllowed(false);
-
-    // 设置列宽
-    setupColumnWidths();
-
-    // 创建滚动面板
-    scrollPane = new JScrollPane(dataTable);
-    scrollPane.setPreferredSize(new Dimension(800, 400));
-
-    // 搜索组件
-    searchField = new JTextField(15);
-    searchField.setToolTipText("搜索测量值或备注");
-
-    searchButton = new JButton("搜索");
-    searchButton.setPreferredSize(new Dimension(80, 30));
-
-    clearButton = new JButton("清空");
-    clearButton.setPreferredSize(new Dimension(80, 30));
-
-    // 日期范围筛选
-    dateRangeCombo = new JComboBox<>(new String[] {
-        "全部", "最近7天", "最近30天", "最近3个月", "最近半年"
-    });
-    dateRangeCombo.setPreferredSize(new Dimension(120, 30));
-
-    // 操作按钮
-    addButton = new JButton("添加数据");
-    addButton.setPreferredSize(new Dimension(100, 30));
-
-    editButton = new JButton("编辑");
-    editButton.setPreferredSize(new Dimension(80, 30));
-    editButton.setEnabled(false);
-
-    deleteButton = new JButton("删除");
-    deleteButton.setPreferredSize(new Dimension(80, 30));
-    deleteButton.setEnabled(false);
-
-    refreshButton = new JButton("刷新");
-    refreshButton.setPreferredSize(new Dimension(80, 30));
-
-    // 状态标签
-    statusLabel = new JLabel("就绪");
-    statusLabel.setFont(new Font("微软雅黑", Font.PLAIN, 12));
-    statusLabel.setForeground(Color.GRAY);
-  }
-
-  /**
-   * 设置表格列宽
-   */
-  private void setupColumnWidths() {
-    TableColumnModel columnModel = dataTable.getColumnModel();
-    columnModel.getColumn(0).setPreferredWidth(80); // 记录ID
-    columnModel.getColumn(1).setPreferredWidth(120); // 检查项
-    columnModel.getColumn(2).setPreferredWidth(100); // 测量值
-    columnModel.getColumn(3).setPreferredWidth(100); // 参考值
-    columnModel.getColumn(4).setPreferredWidth(200); // 备注
-    columnModel.getColumn(5).setPreferredWidth(150); // 记录时间
+    // 创建子组件
+    searchComponent = new UserHealthDataSearchComponent(viewModel);
+    tableComponent = new UserHealthDataTableComponent(viewModel);
+    toolbarComponent = new UserHealthDataToolbarComponent();
   }
 
   /**
    * 设置布局
    */
   private void setupLayout() {
-    setLayout(new BorderLayout());
-    setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    setLayout(new BorderLayout(10, 10));
 
-    // 创建顶部工具栏
-    JPanel toolbarPanel = createToolbarPanel();
-    add(toolbarPanel, BorderLayout.NORTH);
+    // 顶部：搜索组件
+    add(searchComponent, BorderLayout.NORTH);
 
-    // 添加表格
-    add(scrollPane, BorderLayout.CENTER);
+    // 中间：表格组件
+    add(tableComponent, BorderLayout.CENTER);
 
-    // 创建底部状态栏
-    JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    statusPanel.add(statusLabel);
-    add(statusPanel, BorderLayout.SOUTH);
-  }
-
-  /**
-   * 创建工具栏面板
-   */
-  private JPanel createToolbarPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
-
-    // 标题面板
-    JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JLabel titleLabel = new JLabel("健康数据管理");
-    titleLabel.setFont(new Font("微软雅黑", Font.BOLD, 18));
-    titleLabel.setForeground(new Color(51, 51, 51));
-    titlePanel.add(titleLabel);
-
-    // 搜索面板
-    JPanel searchPanel = createSearchPanel();
-
-    // 操作按钮面板
-    JPanel buttonPanel = createButtonPanel();
-
-    panel.add(titlePanel, BorderLayout.WEST);
-    panel.add(searchPanel, BorderLayout.CENTER);
-    panel.add(buttonPanel, BorderLayout.EAST);
-
-    return panel;
-  }
-
-  /**
-   * 创建搜索面板
-   */
-  private JPanel createSearchPanel() {
-    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-    panel.add(new JLabel("搜索:"));
-    panel.add(searchField);
-    panel.add(searchButton);
-    panel.add(clearButton);
-
-    panel.add(Box.createHorizontalStrut(20));
-
-    panel.add(new JLabel("时间范围:"));
-    panel.add(dateRangeCombo);
-
-    return panel;
-  }
-
-  /**
-   * 创建按钮面板
-   */
-  private JPanel createButtonPanel() {
-    JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-    panel.add(addButton);
-    panel.add(Box.createHorizontalStrut(5));
-    panel.add(editButton);
-    panel.add(Box.createHorizontalStrut(5));
-    panel.add(deleteButton);
-    panel.add(Box.createHorizontalStrut(5));
-    panel.add(refreshButton);
-
-    return panel;
+    // 底部：工具栏组件
+    add(toolbarComponent, BorderLayout.SOUTH);
   }
 
   /**
    * 绑定事件
    */
   private void bindEvents() {
-    // 搜索按钮事件
-    searchButton.addActionListener(new ActionListener() {
+    // 设置表格选择回调
+    tableComponent.setSelectionCallback(new UserHealthDataTableComponent.SelectionCallback() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        String keyword = searchField.getText().trim();
-        viewModel.searchHealthDataCommand(keyword);
+      public void onSelectionChanged(ExaminationResult selectedResult) {
+        toolbarComponent.updateButtonStates(selectedResult != null);
+      }
+
+      @Override
+      public void onDoubleClick(ExaminationResult selectedResult) {
+        showResultDetail(selectedResult);
       }
     });
 
-    // 清空按钮事件
-    clearButton.addActionListener(new ActionListener() {
+    // 设置搜索组件回调
+    searchComponent.setSearchCallback(new UserHealthDataSearchComponent.SearchCallback() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        searchField.setText("");
-        dateRangeCombo.setSelectedIndex(0);
-        viewModel.clearSearchConditions();
+      public void onSearch(String keyword) {
+        logger.debug("搜索健康数据，关键词: {}", keyword);
+        // 搜索逻辑已在SearchComponent中通过ViewModel处理
+      }
+
+      @Override
+      public void onClear() {
+        logger.debug("清空搜索条件");
+        // 清空逻辑已在SearchComponent中通过ViewModel处理
+      }
+
+      @Override
+      public void onAppointmentSelected(com.healthsys.model.entity.Appointment appointment) {
+        logger.debug("选择预约: {}", appointment != null ? appointment.getAppointmentId() : "全部");
+        // 通过ViewModel设置选中的预约ID
+        viewModel.setSelectedAppointmentId(appointment != null ? appointment.getAppointmentId() : null);
       }
     });
 
-    // 添加按钮事件
-    addButton.addActionListener(new ActionListener() {
+    // 设置工具栏回调
+    toolbarComponent.setToolbarCallback(new UserHealthDataToolbarComponent.ToolbarCallback() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        showAddHealthDataDialog();
+      public void onAddData() {
+        if (isAdminEntryMode) {
+          showAddDataDialog();
+        } else {
+          ExaminationResult selected = tableComponent.getSelectedResult();
+          if (selected != null) {
+            showResultDetail(selected);
+          }
+        }
       }
-    });
 
-    // 编辑按钮事件
-    editButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        editSelectedData();
+      public void onDeleteData() {
+        ExaminationResult selected = tableComponent.getSelectedResult();
+        if (selected != null) {
+          deleteHealthData(selected);
+        }
       }
-    });
 
-    // 刷新按钮事件
-    refreshButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void onRefreshData() {
         viewModel.refreshData();
+        // 同时刷新预约列表
+        searchComponent.refreshAppointments();
       }
-    });
 
-    // 删除按钮事件
-    deleteButton.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        deleteSelectedData();
+      public void onExportData() {
+        exportHealthData();
+      }
+
+      @Override
+      public void onPrintReport() {
+        printHealthReport();
       }
     });
 
-    // 表格选择事件
-    dataTable.getSelectionModel().addListSelectionListener(e -> {
-      if (!e.getValueIsAdjusting()) {
-        updateButtonStates();
-      }
-    });
-
-    // 回车键搜索
-    searchField.addActionListener(e -> {
-      String keyword = searchField.getText().trim();
-      viewModel.searchHealthDataCommand(keyword);
-    });
-
-    // 监听ViewModel数据变化
+    // 绑定ViewModel事件
     bindViewModelEvents();
   }
 
@@ -298,137 +164,102 @@ public class UserHealthDataPanel extends BasePanel {
    * 绑定ViewModel事件
    */
   private void bindViewModelEvents() {
-    // 监听数据列表变化
-    viewModel.addPropertyChangeListener("healthDataList", evt -> {
+    viewModel.addPropertyChangeListener("loading", evt -> {
       SwingUtilities.invokeLater(() -> {
-        updateTableData();
+        boolean isLoading = (Boolean) evt.getNewValue();
+        toolbarComponent.setLoading(isLoading);
       });
     });
 
-    // 监听状态消息变化
     viewModel.addPropertyChangeListener("statusMessage", evt -> {
       SwingUtilities.invokeLater(() -> {
         String message = (String) evt.getNewValue();
-        statusLabel.setText(message != null ? message : "就绪");
-      });
-    });
-
-    // 监听加载状态变化
-    viewModel.addPropertyChangeListener("loading", evt -> {
-      boolean isLoading = (Boolean) evt.getNewValue();
-      SwingUtilities.invokeLater(() -> {
-        setCursor(isLoading ? Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) : Cursor.getDefaultCursor());
-
-        // 禁用/启用操作按钮
-        searchButton.setEnabled(!isLoading);
-        refreshButton.setEnabled(!isLoading);
-        addButton.setEnabled(!isLoading);
-        if (!isLoading) {
-          updateButtonStates();
-        } else {
-          editButton.setEnabled(false);
-          deleteButton.setEnabled(false);
-        }
+        toolbarComponent.setStatusMessage(message);
       });
     });
   }
 
   /**
-   * 更新表格数据
+   * 显示体检结果详情
    */
-  private void updateTableData() {
-    // 清空现有数据
-    tableModel.setRowCount(0);
-
-    // 添加新数据
-    List<ExaminationResult> dataList = viewModel.getHealthDataList();
-    if (dataList != null) {
-      for (ExaminationResult result : dataList) {
-        Object[] rowData = {
-            result.getResultId(),
-            "检查项_" + result.getItemId(), // TODO: 显示实际检查项名称
-            result.getMeasuredValue(),
-            "参考值", // TODO: 从CheckItem获取参考值
-            result.getResultNotes(),
-            result.getRecordedAt()
-        };
-        tableModel.addRow(rowData);
-      }
-    }
-
-    updateButtonStates();
-  }
-
-  /**
-   * 更新按钮状态
-   */
-  private void updateButtonStates() {
-    int selectedRow = dataTable.getSelectedRow();
-    boolean hasSelection = selectedRow >= 0;
-
-    editButton.setEnabled(hasSelection);
-    deleteButton.setEnabled(hasSelection);
-  }
-
-  /**
-   * 删除选中的数据
-   */
-  private void deleteSelectedData() {
-    int selectedRow = dataTable.getSelectedRow();
-    if (selectedRow < 0) {
-      return;
-    }
-
-    Integer resultId = (Integer) tableModel.getValueAt(selectedRow, 0);
-
-    // 确认删除
-    int result = JOptionPane.showConfirmDialog(
-        this,
-        "确定要删除选中的健康数据吗？",
-        "确认删除",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE);
-
-    if (result == JOptionPane.YES_OPTION) {
-      viewModel.deleteHealthDataCommand(resultId);
-    }
-  }
-
-  /**
-   * 显示添加健康数据对话框
-   */
-  private void showAddHealthDataDialog() {
-    JOptionPane.showMessageDialog(
-        this,
-        "健康数据添加功能正在开发中。\n" +
-            "根据系统设计，健康数据应该基于预约来管理：\n" +
-            "1. 先在预约管理中选择预约\n" +
-            "2. 完成体检后由管理员添加数据\n" +
-            "3. 然后在此处查看和管理数据",
-        "功能提示",
-        JOptionPane.INFORMATION_MESSAGE);
-  }
-
-  /**
-   * 编辑选中的数据
-   */
-  private void editSelectedData() {
-    int selectedRow = dataTable.getSelectedRow();
-    if (selectedRow < 0) {
+  private void showResultDetail(ExaminationResult result) {
+    if (result == null) {
       JOptionPane.showMessageDialog(
           this,
-          "请先选择要编辑的健康数据记录",
+          "请先选择要查看的体检记录",
           "提示",
           JOptionPane.INFORMATION_MESSAGE);
       return;
     }
 
-    Integer resultId = (Integer) tableModel.getValueAt(selectedRow, 0);
+    StringBuilder details = new StringBuilder();
+    details.append("体检结果详情\n");
+    details.append("=================\n\n");
+    details.append("记录ID: ").append(result.getResultId()).append("\n");
+    details.append("预约ID: ").append(result.getAppointmentId()).append("\n");
+    details.append("检查组: ").append(viewModel.getCheckGroupName(result.getGroupId())).append("\n");
+    details.append("检查项: ").append(viewModel.getCheckItemName(result.getItemId())).append("\n");
+    details.append("测量值: ").append(result.getMeasuredValue()).append("\n");
+    details.append("参考值: ").append(viewModel.getCheckItemReferenceValue(result.getItemId())).append("\n");
+    details.append("记录时间: ").append(result.getRecordedAt()).append("\n");
+
+    if (result.getResultNotes() != null && !result.getResultNotes().trim().isEmpty()) {
+      details.append("备注: ").append(result.getResultNotes()).append("\n");
+    }
+
+    JTextArea textArea = new JTextArea(details.toString());
+    textArea.setEditable(false);
+    textArea.setFont(new Font("微软雅黑", Font.PLAIN, 12));
+
+    JScrollPane scrollPane = new JScrollPane(textArea);
+    scrollPane.setPreferredSize(new Dimension(400, 300));
 
     JOptionPane.showMessageDialog(
         this,
-        "健康数据编辑功能正在开发中。\n" +
-            "选中的记录ID: " + resultId,
+        scrollPane,
+        "体检结果详情",
+        JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  /**
+   * 删除健康数据
+   */
+  private void deleteHealthData(ExaminationResult result) {
+    int option = JOptionPane.showConfirmDialog(
+        this,
+        "确定要删除这条体检记录吗？\n\n" +
+            "检查项: " + viewModel.getCheckItemName(result.getItemId()) + "\n" +
+            "测量值: " + result.getMeasuredValue() + "\n" +
+            "记录时间: " + result.getRecordedAt(),
+        "确认删除",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE);
+
+    if (option == JOptionPane.YES_OPTION) {
+      viewModel.deleteHealthDataCommand(result.getResultId());
+    }
+  }
+
+  /**
+   * 导出健康数据
+   */
+  private void exportHealthData() {
+    JOptionPane.showMessageDialog(
+        this,
+        "导出功能正在开发中...\n" +
+            "将支持导出为Excel、PDF等格式",
+        "功能提示",
+        JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  /**
+   * 打印健康报告
+   */
+  private void printHealthReport() {
+    JOptionPane.showMessageDialog(
+        this,
+        "打印功能正在开发中...\n" +
+            "将支持生成标准体检报告并打印",
         "功能提示",
         JOptionPane.INFORMATION_MESSAGE);
   }
@@ -438,5 +269,69 @@ public class UserHealthDataPanel extends BasePanel {
    */
   public UserHealthDataViewModel getViewModel() {
     return viewModel;
+  }
+
+  /**
+   * 进入管理员录入模式
+   * 用于管理员为指定预约录入体检数据
+   * 
+   * @param appointment 要录入数据的预约
+   */
+  public void enterBatchEntryMode(com.healthsys.model.entity.Appointment appointment) {
+    this.isAdminEntryMode = true;
+    this.currentAppointment = appointment;
+
+    // 切换工具栏到管理员录入模式
+    String appointmentInfo = "预约ID: " + appointment.getAppointmentId() +
+        " | 检查组ID: " + appointment.getGroupId();
+    toolbarComponent.enterAdminEntryMode(appointmentInfo);
+
+    logger.info("进入管理员录入模式: {}", appointmentInfo);
+  }
+
+  /**
+   * 显示添加数据对话框
+   */
+  private void showAddDataDialog() {
+    if (currentAppointment == null) {
+      JOptionPane.showMessageDialog(this,
+          "当前没有关联的预约信息",
+          "错误",
+          JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    // 创建单项数据录入对话框
+    Frame parentFrame = (Frame) SwingUtilities.getAncestorOfClass(Frame.class, this);
+    SingleExaminationDataEntryDialog dialog = new SingleExaminationDataEntryDialog(
+        parentFrame, currentAppointment);
+
+    // 设置保存成功回调
+    dialog.setOnSaveCallback(() -> {
+      SwingUtilities.invokeLater(() -> {
+        // 刷新数据
+        viewModel.refreshData();
+
+        JOptionPane.showMessageDialog(this,
+            "体检数据添加成功！",
+            "添加成功",
+            JOptionPane.INFORMATION_MESSAGE);
+      });
+    });
+
+    dialog.setVisible(true);
+  }
+
+  /**
+   * 退出管理员录入模式
+   */
+  public void exitAdminEntryMode() {
+    this.isAdminEntryMode = false;
+    this.currentAppointment = null;
+
+    // 退出工具栏管理员录入模式
+    toolbarComponent.exitAdminEntryMode();
+
+    logger.info("退出管理员录入模式");
   }
 }

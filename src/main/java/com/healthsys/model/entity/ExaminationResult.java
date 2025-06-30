@@ -39,6 +39,12 @@ public class ExaminationResult {
   private Integer userId;
 
   /**
+   * 检查组ID
+   */
+  @TableField("group_id")
+  private Integer groupId;
+
+  /**
    * 检查项ID
    */
   @TableField("item_id")
@@ -65,9 +71,11 @@ public class ExaminationResult {
   /**
    * 便利构造函数 - 用于创建新的检查结果
    */
-  public ExaminationResult(Integer appointmentId, Integer userId, Integer itemId, String measuredValue) {
+  public ExaminationResult(Integer appointmentId, Integer userId, Integer groupId, Integer itemId,
+      String measuredValue) {
     this.appointmentId = appointmentId;
     this.userId = userId;
+    this.groupId = groupId;
     this.itemId = itemId;
     this.measuredValue = measuredValue;
   }

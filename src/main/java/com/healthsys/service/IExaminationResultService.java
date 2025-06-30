@@ -94,4 +94,13 @@ public interface IExaminationResultService {
    * @return 体检结果列表
    */
   List<ExaminationResult> getAllExaminationResults(int current, int size);
+
+  /**
+   * 批量保存体检结果
+   * 确保批量保存的事务性和数据一致性
+   * 
+   * @param results 体检结果列表
+   * @return 保存成功返回true，失败返回false
+   */
+  boolean batchSaveExaminationResults(List<ExaminationResult> results);
 }
