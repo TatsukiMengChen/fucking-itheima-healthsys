@@ -1,5 +1,6 @@
 package com.healthsys.viewmodel.admin.usermanagement;
 
+import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.User;
 import com.healthsys.model.enums.UserRoleEnum;
 import com.healthsys.service.IUserService;
@@ -26,9 +27,6 @@ public class UserManagementViewModel extends BaseViewModel {
   private final IUserService userService;
   private final ExecutorService executorService;
 
-  // 当前登录用户信息
-  private User currentUser;
-
   // 用户列表数据
   private List<User> userList;
   private List<User> filteredUserList;
@@ -50,11 +48,9 @@ public class UserManagementViewModel extends BaseViewModel {
    * 构造函数
    *
    * @param userService 用户服务
-   * @param currentUser 当前登录用户
    */
-  public UserManagementViewModel(IUserService userService, User currentUser) {
+  public UserManagementViewModel(IUserService userService) {
     this.userService = userService;
-    this.currentUser = currentUser;
     this.userList = new ArrayList<>();
     this.filteredUserList = new ArrayList<>();
     this.executorService = Executors.newCachedThreadPool();
@@ -133,16 +129,17 @@ public class UserManagementViewModel extends BaseViewModel {
       return;
     }
 
-    // 权限检查 - 只有管理员和超级管理员可以删除用户
-    if (!canDeleteUser()) {
+    // 权限检查 - 只有超级管理员可以删除用户
+    if (!AppContext.isSuperAdmin()) {
       if (onError != null) {
-        onError.accept("权限不足，无法删除用户");
+        onError.accept("权限不足，只有超级管理员可以删除用户");
       }
       return;
     }
 
     // 不能删除自己
-    if (userId.equals(currentUser.getUserId())) {
+    User currentUser = AppContext.getCurrentUser();
+    if (currentUser != null && userId.equals(currentUser.getUserId())) {
       if (onError != null) {
         onError.accept("不能删除当前登录用户");
       }
@@ -195,11 +192,8 @@ public class UserManagementViewModel extends BaseViewModel {
    * @return true表示可以添加
    */
   public boolean canAddUser() {
-    if (currentUser == null) {
-      return false;
-    }
-    UserRoleEnum role = UserRoleEnum.valueOf(currentUser.getRole());
-    return role == UserRoleEnum.ADMIN || role == UserRoleEnum.SUPER_ADMIN;
+    // 只有超级管理员可以添加用户
+    return AppContext.isSuperAdmin();
   }
 
   /**
@@ -209,24 +203,24 @@ public class UserManagementViewModel extends BaseViewModel {
    * @return true表示可以编辑
    */
   public boolean canEditUser(User targetUser) {
-    if (currentUser == null || targetUser == null) {
+    if (targetUser == null) {
       return false;
     }
 
-    UserRoleEnum currentRole = UserRoleEnum.valueOf(currentUser.getRole());
-    UserRoleEnum targetRole = UserRoleEnum.valueOf(targetUser.getRole());
-
-    // 超级管理员可以编辑所有用户
-    if (currentRole == UserRoleEnum.SUPER_ADMIN) {
-      return true;
+    UserRoleEnum currentRole = AppContext.getCurrentUserRole();
+    if (currentRole == null) {
+      return false;
     }
 
-    // 管理员可以编辑普通用户，但不能编辑其他管理员和超级管理员
-    if (currentRole == UserRoleEnum.ADMIN) {
-      return targetRole == UserRoleEnum.NORMAL_USER;
+    UserRoleEnum targetRole;
+    try {
+      targetRole = UserRoleEnum.valueOf(targetUser.getRole());
+    } catch (Exception e) {
+      return false;
     }
 
-    return false;
+    // 只有超级管理员可以编辑用户
+    return currentRole == UserRoleEnum.SUPER_ADMIN;
   }
 
   /**
@@ -235,11 +229,8 @@ public class UserManagementViewModel extends BaseViewModel {
    * @return true表示可以删除
    */
   public boolean canDeleteUser() {
-    if (currentUser == null) {
-      return false;
-    }
-    UserRoleEnum role = UserRoleEnum.valueOf(currentUser.getRole());
-    return role == UserRoleEnum.ADMIN || role == UserRoleEnum.SUPER_ADMIN;
+    // 只有超级管理员可以删除用户
+    return AppContext.isSuperAdmin();
   }
 
   /**
@@ -249,14 +240,12 @@ public class UserManagementViewModel extends BaseViewModel {
    * @return true表示可以修改角色
    */
   public boolean canModifyUserRole(User targetUser) {
-    if (currentUser == null || targetUser == null) {
+    if (targetUser == null) {
       return false;
     }
 
-    UserRoleEnum currentRole = UserRoleEnum.valueOf(currentUser.getRole());
-
     // 只有超级管理员可以修改用户角色
-    return currentRole == UserRoleEnum.SUPER_ADMIN;
+    return AppContext.isSuperAdmin();
   }
 
   /**
@@ -267,21 +256,18 @@ public class UserManagementViewModel extends BaseViewModel {
   public List<UserRoleEnum> getAvailableRoles() {
     List<UserRoleEnum> roles = new ArrayList<>();
 
-    if (currentUser == null) {
+    UserRoleEnum currentRole = AppContext.getCurrentUserRole();
+    if (currentRole == null) {
       return roles;
     }
-
-    UserRoleEnum currentRole = UserRoleEnum.valueOf(currentUser.getRole());
 
     if (currentRole == UserRoleEnum.SUPER_ADMIN) {
       // 超级管理员可以分配所有角色
       roles.add(UserRoleEnum.NORMAL_USER);
       roles.add(UserRoleEnum.ADMIN);
       roles.add(UserRoleEnum.SUPER_ADMIN);
-    } else if (currentRole == UserRoleEnum.ADMIN) {
-      // 管理员只能分配普通用户角色
-      roles.add(UserRoleEnum.NORMAL_USER);
     }
+    // 其他角色无权分配角色
 
     return roles;
   }
@@ -310,14 +296,6 @@ public class UserManagementViewModel extends BaseViewModel {
 
   public void setPageSize(int pageSize) {
     this.pageSize = pageSize;
-  }
-
-  public User getCurrentUser() {
-    return currentUser;
-  }
-
-  public void setCurrentUser(User currentUser) {
-    this.currentUser = currentUser;
   }
 
   // Event Listeners

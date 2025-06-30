@@ -1,5 +1,6 @@
 package com.healthsys.view.admin.usermanagement;
 
+import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.User;
 import com.healthsys.service.IUserService;
 import com.healthsys.view.admin.usermanagement.component.UserTableComponent;
@@ -107,7 +108,7 @@ public class UserManagementPanel extends JPanel {
     // 创建编辑ViewModel
     UserEditViewModel editViewModel = new UserEditViewModel(
         userService,
-        managementViewModel.getCurrentUser());
+        AppContext.getCurrentUser());
 
     // 设置编辑模式
     editViewModel.setEditingUser(user);

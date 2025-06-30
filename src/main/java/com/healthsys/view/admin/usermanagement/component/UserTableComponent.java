@@ -1,5 +1,6 @@
 package com.healthsys.view.admin.usermanagement.component;
 
+import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.User;
 import com.healthsys.model.enums.UserRoleEnum;
 import com.healthsys.viewmodel.admin.usermanagement.UserManagementViewModel;
@@ -315,7 +316,7 @@ public class UserTableComponent extends JPanel {
 
     // 删除按钮状态
     deleteButton.setEnabled(hasSelection && viewModel.canDeleteUser() &&
-        !selectedUser.getUserId().equals(viewModel.getCurrentUser().getUserId()));
+        !selectedUser.getUserId().equals(AppContext.getCurrentUser().getUserId()));
   }
 
   // 事件监听器设置方法

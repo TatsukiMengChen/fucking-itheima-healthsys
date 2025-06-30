@@ -1,5 +1,6 @@
 package com.healthsys.viewmodel.admin.checkgroup;
 
+import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.CheckGroup;
 import com.healthsys.service.ICheckGroupService;
 import com.healthsys.service.impl.CheckGroupServiceImpl;
@@ -120,6 +121,12 @@ public class CheckGroupManagementViewModel extends BaseViewModel {
    * 添加检查组
    */
   public void addCheckGroup() {
+    // 权限检查
+    if (!AppContext.isAdmin()) {
+      firePropertyChange("operationError", null, "您没有权限执行此操作");
+      return;
+    }
+
     // 通过事件通知视图层打开添加对话框
     firePropertyChange("addCheckGroupRequested", false, true);
   }
@@ -128,6 +135,12 @@ public class CheckGroupManagementViewModel extends BaseViewModel {
    * 编辑检查组
    */
   public void editCheckGroup() {
+    // 权限检查
+    if (!AppContext.isAdmin()) {
+      firePropertyChange("operationError", null, "您没有权限执行此操作");
+      return;
+    }
+
     if (selectedCheckGroup == null) {
       firePropertyChange("operationError", null, "请先选择要编辑的检查组");
       return;
@@ -141,6 +154,12 @@ public class CheckGroupManagementViewModel extends BaseViewModel {
    * 删除检查组
    */
   public void deleteCheckGroup() {
+    // 权限检查
+    if (!AppContext.isAdmin()) {
+      firePropertyChange("operationError", null, "您没有权限执行此操作");
+      return;
+    }
+
     if (selectedCheckGroup == null) {
       firePropertyChange("operationError", null, "请先选择要删除的检查组");
       return;

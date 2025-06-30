@@ -199,29 +199,38 @@
   - [x] **ViewModel**: `UserHealthDataViewModel`, `UserHealthDataEditViewModel`。
   - [x] **View**: `UserHealthDataPanel`, `UserHealthDataTableComponent`, `UserHealthDataEditFormComponent` (可复用)。实现与管理员模块类似的 CRUD 界面，但仅限于当前登录用户的数据。
 
-### **阶段六：系统整合与完善 (Phase 6: Integration & Refinement)**
+### **阶段六：系统整合与完善 (Phase 6: Integration & Refinement)** ✅
 
 **目标**: 将所有模块整合到主框架中，完善导航、权限控制和用户体验。
 
 - **任务 6.1: 主框架与导航**
 
-  - [ ] 在 `com.healthsys.view.common` 创建通用布局组件：
-    - [ ] `HeaderComponent.java`: 顶部标题栏，可显示用户名。
-    - [ ] `SidebarComponent.java`: 左侧导航栏，用按钮或列表显示可访问的模块。
-  - [ ] 在 `MainFrame.java` 中，实现登录成功后的主界面布局（例如 `BorderLayout`），将 `HeaderComponent` 置于顶部，`SidebarComponent` 置于左侧，主内容面板置于中央。
-  - [ ] 实现 `SidebarComponent` 的导航逻辑：点击不同按钮时，通知 `MainFrame` 在中央区域切换显示不同的主面板（如 `CheckItemManagementPanel`, `AppointmentPanel` 等）。
+  - [x] 在 `com.healthsys.view.common` 创建通用布局组件：
+    - [x] `HeaderComponent.java`: 顶部标题栏，可显示用户名。
+    - [x] `SidebarComponent.java`: 左侧导航栏，用按钮或列表显示可访问的模块。
+  - [x] 在 `MainFrame.java` 中，实现登录成功后的主界面布局（例如 `BorderLayout`），将 `HeaderComponent` 置于顶部，`SidebarComponent` 置于左侧，主内容面板置于中央。
+  - [x] 实现 `SidebarComponent` 的导航逻辑：点击不同按钮时，通知 `MainFrame` 在中央区域切换显示不同的主面板（如 `CheckItemManagementPanel`, `AppointmentPanel` 等）。
 
 - **任务 6.2: 权限控制**
 
-  - [ ] 在用户成功登录后，将用户信息（特别是角色 `UserRoleEnum`）保存在一个全局可访问的位置（例如一个单例的 `AppContext` 类）。
-  - [ ] `SidebarComponent` 的 ViewModel 需要根据当前用户的角色，动态决定显示哪些导航项。
-  - [ ] 在各个 ViewModel 中（尤其是管理模块），添加对用户角色的检查，以控制具体操作（如删除、修改角色）的可用性。
+  - [x] 在用户成功登录后，将用户信息（特别是角色 `UserRoleEnum`）保存在一个全局可访问的位置（例如一个单例的 `AppContext` 类）。
+  - [x] `SidebarComponent` 的 ViewModel 需要根据当前用户的角色，动态决定显示哪些导航项。
+  - [x] 在各个 ViewModel 中（尤其是管理模块），添加对用户角色的检查，以控制具体操作（如删除、修改角色）的可用性。
 
 - **任务 6.3: UI/UX 优化**
-  - [ ] 全面检查所有视图，确保布局、间距、字体、颜色符合 **FlatLaf** 的现代风格。
-  - [ ] 为所有按钮和可交互元素添加图标（可以放在 `src/main/resources/images`）。
-  - [ ] 确保所有耗时操作（数据库查询、网络请求）都在后台线程 (`SwingWorker` 或 `ExecutorService`) 中执行，避免 UI 冻结，并显示加载状态。
-  - [ ] 完善所有表单的输入校验和友好的错误提示。
+  - [x] 全面检查所有视图，确保布局、间距、字体、颜色符合 **FlatLaf** 的现代风格。
+  - [x] 为所有按钮和可交互元素添加图标（可以放在 `src/main/resources/images`）。
+  - [x] 确保所有耗时操作（数据库查询、网络请求）都在后台线程 (`SwingWorker` 或 `ExecutorService`) 中执行，避免 UI 冻结，并显示加载状态。
+  - [x] 完善所有表单的输入校验和友好的错误提示。
+
+**阶段六完成总结：**
+- ✅ 创建了完整的主框架系统 (MainFrame、HeaderComponent、SidebarComponent)
+- ✅ 实现了AppContext全局应用上下文管理
+- ✅ 完善了基于角色的权限控制和UI显示逻辑
+- ✅ 开发了IconUtil图标工具类，提供丰富的图标支持
+- ✅ 创建了LoadingComponent加载状态组件，提升用户体验
+- ✅ 优化了界面样式，添加了渐变背景和现代化视觉效果
+- ✅ 实现了基于权限的动态导航和功能访问控制
 
 ### **阶段七：测试、打包与交付 (Phase 7: Testing, Packaging & Delivery)**
 

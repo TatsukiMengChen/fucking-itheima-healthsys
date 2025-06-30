@@ -1,5 +1,6 @@
 package com.healthsys.viewmodel.admin.checkitem;
 
+import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.CheckItem;
 import com.healthsys.service.ICheckItemService;
 import com.healthsys.service.impl.CheckItemServiceImpl;
@@ -120,6 +121,12 @@ public class CheckItemManagementViewModel extends BaseViewModel {
    * 添加检查项
    */
   public void addCheckItem() {
+    // 权限检查
+    if (!AppContext.isAdmin()) {
+      notificationViewModel.showError("您没有权限执行此操作");
+      return;
+    }
+
     // 通过事件通知视图层打开添加对话框
     firePropertyChange("addCheckItemRequested", false, true);
   }
@@ -128,6 +135,12 @@ public class CheckItemManagementViewModel extends BaseViewModel {
    * 编辑检查项
    */
   public void editCheckItem() {
+    // 权限检查
+    if (!AppContext.isAdmin()) {
+      notificationViewModel.showError("您没有权限执行此操作");
+      return;
+    }
+
     if (selectedCheckItem == null) {
       notificationViewModel.showWarning("请先选择要编辑的检查项");
       return;
@@ -141,6 +154,12 @@ public class CheckItemManagementViewModel extends BaseViewModel {
    * 删除检查项
    */
   public void deleteCheckItem() {
+    // 权限检查
+    if (!AppContext.isAdmin()) {
+      notificationViewModel.showError("您没有权限执行此操作");
+      return;
+    }
+
     if (selectedCheckItem == null) {
       notificationViewModel.showWarning("请先选择要删除的检查项");
       return;

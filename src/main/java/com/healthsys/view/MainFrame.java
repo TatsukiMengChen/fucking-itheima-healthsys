@@ -1,11 +1,23 @@
 package com.healthsys.view;
 
+import com.healthsys.config.AppContext;
 import com.healthsys.dao.UserMapper;
 import com.healthsys.service.IEmailService;
 import com.healthsys.service.IUserService;
 import com.healthsys.service.impl.EmailServiceImpl;
 import com.healthsys.service.impl.UserServiceImpl;
+import com.healthsys.view.admin.checkgroup.CheckGroupManagementPanel;
+import com.healthsys.view.admin.checkitem.CheckItemManagementPanel;
+import com.healthsys.view.admin.usermanagement.UserManagementPanel;
 import com.healthsys.view.auth.AuthPanel;
+import com.healthsys.view.common.HeaderComponent;
+import com.healthsys.view.common.SidebarComponent;
+import com.healthsys.view.settings.SystemSettingsPanel;
+import com.healthsys.view.user.analysis.ResultAnalysisPanel;
+import com.healthsys.view.user.appointment.AppointmentPanel;
+import com.healthsys.view.user.healthdata.UserHealthDataPanel;
+import com.healthsys.view.user.tracking.HealthTrackingPanel;
+import com.healthsys.viewmodel.admin.usermanagement.UserManagementViewModel;
 import com.healthsys.viewmodel.auth.AuthViewModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +46,9 @@ public class MainFrame extends JFrame {
   // UI组件
   private JPanel contentPanel;
   private JPanel currentViewPanel;
+  private HeaderComponent headerComponent;
+  private SidebarComponent sidebarComponent;
+  private JPanel mainContentPanel;
 
   // 认证相关组件
   private AuthPanel authPanel;
@@ -42,6 +57,16 @@ public class MainFrame extends JFrame {
   // 服务层组件
   private IUserService userService;
   private IEmailService emailService;
+
+  // 页面面板缓存
+  private AppointmentPanel appointmentPanel;
+  private HealthTrackingPanel healthTrackingPanel;
+  private ResultAnalysisPanel resultAnalysisPanel;
+  private UserHealthDataPanel userHealthDataPanel;
+  private CheckItemManagementPanel checkItemManagementPanel;
+  private CheckGroupManagementPanel checkGroupManagementPanel;
+  private UserManagementPanel userManagementPanel;
+  private SystemSettingsPanel systemSettingsPanel;
 
   /**
    * 构造函数
@@ -212,32 +237,168 @@ public class MainFrame extends JFrame {
    * 显示主应用视图（用户登录后）
    */
   private void showMainApplicationView(com.healthsys.model.entity.User user) {
-    // TODO: 创建并显示主应用界面
-    JPanel mainAppPanel = new JPanel(new BorderLayout());
+    try {
+      // 设置当前登录用户到全局上下文
+      AppContext.setCurrentUser(user);
 
-    // 临时显示用户信息
-    JLabel userLabel = new JLabel("<html><div style='text-align: center;'>" +
-        "<h2>欢迎, " + user.getUsername() + "!</h2>" +
-        "<p>用户角色: " + user.getRole() + "</p>" +
-        "<p>邮箱: " + user.getEmail() + "</p>" +
-        "<p>注册时间: " + user.getCreatedAt() + "</p>" +
-        "<hr>" +
-        "<p>主应用界面正在开发中...</p>" +
+      // 创建主应用面板
+      JPanel mainAppPanel = new JPanel(new BorderLayout());
+
+      // 创建Header组件
+      if (headerComponent == null) {
+        headerComponent = new HeaderComponent();
+      }
+      headerComponent.updateUserInfo();
+
+      // 创建Sidebar组件
+      if (sidebarComponent == null) {
+        sidebarComponent = new SidebarComponent();
+        sidebarComponent.setNavigationListener(this::handleNavigation);
+      }
+      sidebarComponent.updateNavigationButtons();
+
+      // 创建主内容面板
+      if (mainContentPanel == null) {
+        mainContentPanel = new JPanel(new BorderLayout());
+        mainContentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+      }
+
+      // 显示默认的主页面
+      showDefaultMainPage();
+
+      // 布局主应用面板
+      mainAppPanel.add(headerComponent, BorderLayout.NORTH);
+      mainAppPanel.add(sidebarComponent, BorderLayout.WEST);
+      mainAppPanel.add(mainContentPanel, BorderLayout.CENTER);
+
+      // 设置当前视图
+      setCurrentView(mainAppPanel);
+      setTitle("健康管理系统 - " + user.getUsername());
+      setStatusMessage("用户已登录: " + user.getUsername());
+
+      logger.info("主应用界面已显示，用户: {}", user.getUsername());
+
+    } catch (Exception e) {
+      logger.error("显示主应用视图失败", e);
+      JOptionPane.showMessageDialog(this,
+          "主界面加载失败：" + e.getMessage(),
+          "错误",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  /**
+   * 处理导航事件
+   */
+  private void handleNavigation(String targetPanel) {
+    logger.info("导航到: {}", targetPanel);
+
+    try {
+      switch (targetPanel) {
+        case "logout":
+          logout();
+          break;
+        case "appointment":
+          setMainContent(getAppointmentPanel());
+          setTitle("健康管理系统 - 预约管理");
+          break;
+        case "tracking":
+          setMainContent(getHealthTrackingPanel());
+          setTitle("健康管理系统 - 健康跟踪");
+          break;
+        case "analysis":
+          setMainContent(getResultAnalysisPanel());
+          setTitle("健康管理系统 - 体检结果分析");
+          break;
+        case "userdata":
+          setMainContent(getUserHealthDataPanel());
+          setTitle("健康管理系统 - 健康数据管理");
+          break;
+        case "checkitem":
+          setMainContent(getCheckItemManagementPanel());
+          setTitle("健康管理系统 - 检查项管理");
+          break;
+        case "checkgroup":
+          setMainContent(getCheckGroupManagementPanel());
+          setTitle("健康管理系统 - 检查组管理");
+          break;
+        case "admindata":
+          // 管理员查看用户健康数据，可以复用用户健康数据面板
+          setMainContent(getUserHealthDataPanel());
+          setTitle("健康管理系统 - 用户健康数据管理");
+          break;
+        case "usermanagement":
+          setMainContent(getUserManagementPanel());
+          setTitle("健康管理系统 - 用户管理");
+          break;
+        case "settings":
+          setMainContent(getSystemSettingsPanel());
+          setTitle("健康管理系统 - 系统设置");
+          break;
+        default:
+          logger.warn("未知的导航目标: {}", targetPanel);
+          showDefaultMainPage();
+          break;
+      }
+    } catch (Exception e) {
+      logger.error("处理导航失败: {}", targetPanel, e);
+      JOptionPane.showMessageDialog(this,
+          "页面切换失败：" + e.getMessage(),
+          "错误",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  /**
+   * 显示默认主页面
+   */
+  private void showDefaultMainPage() {
+    var currentUser = AppContext.getCurrentUser();
+    if (currentUser != null) {
+      JPanel welcomePanel = new JPanel(new BorderLayout());
+
+      JLabel welcomeLabel = new JLabel("<html><div style='text-align: center;'>" +
+          "<h2>欢迎, " + currentUser.getUsername() + "!</h2>" +
+          "<p>用户角色: " + currentUser.getRole() + "</p>" +
+          "<p>邮箱: " + currentUser.getEmail() + "</p>" +
+          "<p>注册时间: " + currentUser.getCreatedAt() + "</p>" +
+          "<hr>" +
+          "<p>请从左侧菜单选择要使用的功能</p>" +
+          "</div></html>", JLabel.CENTER);
+      welcomeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 14));
+
+      welcomePanel.add(welcomeLabel, BorderLayout.CENTER);
+      setMainContent(welcomePanel);
+    }
+  }
+
+  /**
+   * 显示临时功能页面（功能开发中）
+   */
+  private void showTempPanel(String title, String message) {
+    JPanel tempPanel = new JPanel(new BorderLayout());
+
+    JLabel titleLabel = new JLabel("<html><div style='text-align: center;'>" +
+        "<h2>" + title + "</h2>" +
+        "<p>" + message + "</p>" +
+        "<p>此功能将在后续版本中实现</p>" +
         "</div></html>", JLabel.CENTER);
-    userLabel.setFont(new Font("微软雅黑", Font.PLAIN, 14));
+    titleLabel.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 
-    // 添加退出登录按钮
-    JPanel buttonPanel = new JPanel(new FlowLayout());
-    JButton logoutButton = new JButton("退出登录");
-    logoutButton.addActionListener(e -> logout());
-    buttonPanel.add(logoutButton);
+    tempPanel.add(titleLabel, BorderLayout.CENTER);
+    setMainContent(tempPanel);
+  }
 
-    mainAppPanel.add(userLabel, BorderLayout.CENTER);
-    mainAppPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-    setCurrentView(mainAppPanel);
-    setTitle("健康管理系统 - " + user.getUsername());
-    setStatusMessage("用户已登录: " + user.getUsername());
+  /**
+   * 设置主内容面板的内容
+   */
+  private void setMainContent(JPanel content) {
+    if (mainContentPanel != null) {
+      mainContentPanel.removeAll();
+      mainContentPanel.add(content, BorderLayout.CENTER);
+      mainContentPanel.revalidate();
+      mainContentPanel.repaint();
+    }
   }
 
   /**
@@ -253,6 +414,23 @@ public class MainFrame extends JFrame {
 
     if (option == JOptionPane.YES_OPTION) {
       logger.info("用户退出登录");
+
+      // 清理全局用户上下文
+      AppContext.logout();
+
+      // 清理UI组件
+      if (headerComponent != null) {
+        headerComponent.dispose();
+        headerComponent = null;
+      }
+
+      if (sidebarComponent != null) {
+        sidebarComponent = null;
+      }
+
+      if (mainContentPanel != null) {
+        mainContentPanel = null;
+      }
 
       // 重置认证状态
       if (authPanel != null) {
@@ -332,6 +510,87 @@ public class MainFrame extends JFrame {
   }
 
   /**
+   * 获取预约面板（懒加载）
+   */
+  private JPanel getAppointmentPanel() {
+    if (appointmentPanel == null) {
+      appointmentPanel = new AppointmentPanel();
+    }
+    return appointmentPanel;
+  }
+
+  /**
+   * 获取健康跟踪面板（懒加载）
+   */
+  private JPanel getHealthTrackingPanel() {
+    if (healthTrackingPanel == null) {
+      healthTrackingPanel = new HealthTrackingPanel();
+    }
+    return healthTrackingPanel;
+  }
+
+  /**
+   * 获取体检结果分析面板（懒加载）
+   */
+  private JPanel getResultAnalysisPanel() {
+    if (resultAnalysisPanel == null) {
+      resultAnalysisPanel = new ResultAnalysisPanel();
+    }
+    return resultAnalysisPanel;
+  }
+
+  /**
+   * 获取用户健康数据面板（懒加载）
+   */
+  private JPanel getUserHealthDataPanel() {
+    if (userHealthDataPanel == null) {
+      userHealthDataPanel = new UserHealthDataPanel();
+    }
+    return userHealthDataPanel;
+  }
+
+  /**
+   * 获取检查项管理面板（懒加载）
+   */
+  private JPanel getCheckItemManagementPanel() {
+    if (checkItemManagementPanel == null) {
+      checkItemManagementPanel = new CheckItemManagementPanel();
+    }
+    return checkItemManagementPanel;
+  }
+
+  /**
+   * 获取检查组管理面板（懒加载）
+   */
+  private JPanel getCheckGroupManagementPanel() {
+    if (checkGroupManagementPanel == null) {
+      checkGroupManagementPanel = new CheckGroupManagementPanel();
+    }
+    return checkGroupManagementPanel;
+  }
+
+  /**
+   * 获取用户管理面板（懒加载）
+   */
+  private JPanel getUserManagementPanel() {
+    if (userManagementPanel == null) {
+      UserManagementViewModel userManagementViewModel = new UserManagementViewModel(userService);
+      userManagementPanel = new UserManagementPanel(userManagementViewModel, userService);
+    }
+    return userManagementPanel;
+  }
+
+  /**
+   * 获取系统设置面板（懒加载）
+   */
+  private JPanel getSystemSettingsPanel() {
+    if (systemSettingsPanel == null) {
+      systemSettingsPanel = new SystemSettingsPanel();
+    }
+    return systemSettingsPanel;
+  }
+
+  /**
    * 清理资源
    */
   private void cleanup() {
@@ -344,6 +603,16 @@ public class MainFrame extends JFrame {
       if (authViewModel != null) {
         authViewModel.dispose();
       }
+
+      // 清理面板缓存
+      appointmentPanel = null;
+      healthTrackingPanel = null;
+      resultAnalysisPanel = null;
+      userHealthDataPanel = null;
+      checkItemManagementPanel = null;
+      checkGroupManagementPanel = null;
+      userManagementPanel = null;
+      systemSettingsPanel = null;
 
       // TODO: 关闭数据库连接
       // TODO: 保存用户设置
