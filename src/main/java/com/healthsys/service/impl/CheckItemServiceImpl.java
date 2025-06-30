@@ -149,7 +149,7 @@ public class CheckItemServiceImpl implements ICheckItemService {
     Page<CheckItem> page = new Page<>(currentPage, pageSize);
 
     QueryWrapper<CheckItem> wrapper = new QueryWrapper<>();
-    wrapper.orderByDesc("created_at");
+    wrapper.orderByAsc("item_id");
 
     return checkItemMapper.selectPage(page, wrapper);
   }
@@ -162,7 +162,7 @@ public class CheckItemServiceImpl implements ICheckItemService {
     if (StrUtil.isNotBlank(itemName)) {
       wrapper.like("item_name", itemName.trim());
     }
-    wrapper.orderByDesc("created_at");
+    wrapper.orderByAsc("item_id");
 
     return checkItemMapper.selectPage(page, wrapper);
   }
@@ -175,7 +175,7 @@ public class CheckItemServiceImpl implements ICheckItemService {
     if (StrUtil.isNotBlank(itemCode)) {
       wrapper.like("item_code", itemCode.trim());
     }
-    wrapper.orderByDesc("created_at");
+    wrapper.orderByAsc("item_id");
 
     return checkItemMapper.selectPage(page, wrapper);
   }
@@ -191,7 +191,7 @@ public class CheckItemServiceImpl implements ICheckItemService {
     if (StrUtil.isNotBlank(itemCode)) {
       wrapper.like("item_code", itemCode.trim());
     }
-    wrapper.orderByDesc("created_at");
+    wrapper.orderByAsc("item_id");
 
     return checkItemMapper.selectPage(page, wrapper);
   }
@@ -200,7 +200,7 @@ public class CheckItemServiceImpl implements ICheckItemService {
   public List<CheckItem> getAllActiveCheckItems() {
     QueryWrapper<CheckItem> wrapper = new QueryWrapper<>();
     wrapper.eq("is_active", true)
-        .orderBy(true, true, "item_name");
+        .orderByAsc("item_id");
 
     return checkItemMapper.selectList(wrapper);
   }

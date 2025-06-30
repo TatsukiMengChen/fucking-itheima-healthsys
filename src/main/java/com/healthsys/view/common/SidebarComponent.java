@@ -1,14 +1,26 @@
 package com.healthsys.view.common;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
 import com.healthsys.config.AppContext;
 import com.healthsys.model.enums.UserRoleEnum;
 import com.healthsys.util.IconUtil;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 左侧导航栏组件
@@ -63,7 +75,7 @@ public class SidebarComponent extends JPanel {
 
     // 添加标题
     JLabel titleLabel = new JLabel("导航菜单");
-    titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+    titleLabel.setFont(new Font("微软雅黑", Font.BOLD, 14));
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     add(titleLabel);
@@ -102,24 +114,52 @@ public class SidebarComponent extends JPanel {
       return;
     }
 
-    switch (userRole) {
-      case NORMAL_USER:
-        addUserNavigationButtons();
-        break;
-      case ADMIN:
-        addAdminNavigationButtons();
-        break;
-      case SUPER_ADMIN:
-        addSuperAdminNavigationButtons();
-        break;
-    }
-
-    // 添加通用按钮
-    addCommonNavigationButtons();
+    // 根据角色添加相应的导航项
+    addNavigationByRole(userRole);
 
     // 刷新界面
     revalidate();
     repaint();
+  }
+
+  /**
+   * 根据用户角色添加导航项
+   */
+  private void addNavigationByRole(UserRoleEnum userRole) {
+    switch (userRole) {
+      case NORMAL_USER:
+        addSectionTitle("系统功能");
+        addUserNavigationButtons();
+        break;
+      case ADMIN:
+        addSectionTitle("系统功能");
+        addUserNavigationButtons();
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        addSectionTitle("管理功能");
+        addAdminOnlyNavigationButtons();
+        break;
+      case SUPER_ADMIN:
+        addSectionTitle("系统功能");
+        addUserNavigationButtons();
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        addSectionTitle("管理功能");
+        addAdminOnlyNavigationButtons();
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        addSectionTitle("系统管理");
+        addSuperAdminOnlyNavigationButtons();
+        break;
+    }
+
+    // 添加弹性空间，将系统设置功能推到底部
+    add(Box.createVerticalGlue());
+
+    // 添加分隔线
+    add(new JSeparator());
+    add(Box.createRigidArea(new Dimension(0, 5)));
+
+    // 添加系统设置功能
+    addSectionTitle("系统设置");
+    addCommonNavigationButtons();
   }
 
   /**
@@ -133,30 +173,19 @@ public class SidebarComponent extends JPanel {
   }
 
   /**
-   * 添加管理员导航按钮
+   * 添加管理员专有导航按钮
    */
-  private void addAdminNavigationButtons() {
-    // 管理员可以访问普通用户的所有功能
-    addUserNavigationButtons();
-
-    // 添加管理员专有功能
-    add(Box.createRigidArea(new Dimension(0, 10)));
-    addSectionTitle("管理功能");
+  private void addAdminOnlyNavigationButtons() {
+    addNavigationButton("预约管理", "adminappointment", "calendar");
     addNavigationButton("检查项管理", "checkitem", "edit");
     addNavigationButton("检查组管理", "checkgroup", "settings");
     addNavigationButton("用户健康数据", "admindata", "search");
   }
 
   /**
-   * 添加超级管理员导航按钮
+   * 添加超级管理员专有导航按钮
    */
-  private void addSuperAdminNavigationButtons() {
-    // 超级管理员可以访问管理员的所有功能
-    addAdminNavigationButtons();
-
-    // 添加超级管理员专有功能
-    add(Box.createRigidArea(new Dimension(0, 10)));
-    addSectionTitle("系统管理");
+  private void addSuperAdminOnlyNavigationButtons() {
     addNavigationButton("用户管理", "usermanagement", "user");
   }
 
@@ -164,8 +193,6 @@ public class SidebarComponent extends JPanel {
    * 添加通用导航按钮
    */
   private void addCommonNavigationButtons() {
-    add(Box.createRigidArea(new Dimension(0, 20)));
-    addSectionTitle("系统功能");
     addNavigationButton("系统设置", "settings", "settings");
     addNavigationButton("退出登录", "logout", "logout");
   }
@@ -189,9 +216,10 @@ public class SidebarComponent extends JPanel {
     }
 
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
+    button.setMaximumSize(new Dimension(180, 35));
     button.setPreferredSize(new Dimension(180, 35));
-    button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+    button.setMinimumSize(new Dimension(180, 35));
+    button.setFont(new Font("微软雅黑", Font.PLAIN, 12));
 
     // 设置按钮样式
     button.setFocusPainted(false);

@@ -1,5 +1,14 @@
 package com.healthsys.viewmodel.admin.checkgroup;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+
+import javax.swing.SwingUtilities;
+
 import com.healthsys.model.entity.CheckGroup;
 import com.healthsys.model.entity.CheckItem;
 import com.healthsys.service.ICheckGroupService;
@@ -7,16 +16,8 @@ import com.healthsys.service.ICheckItemService;
 import com.healthsys.service.impl.CheckGroupServiceImpl;
 import com.healthsys.service.impl.CheckItemServiceImpl;
 import com.healthsys.viewmodel.base.BaseViewModel;
-import com.healthsys.viewmodel.common.NotificationViewModel;
-import cn.hutool.core.util.StrUtil;
 
-import javax.swing.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 检查组编辑ViewModel

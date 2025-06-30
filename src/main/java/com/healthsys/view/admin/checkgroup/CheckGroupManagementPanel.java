@@ -1,6 +1,18 @@
 package com.healthsys.view.admin.checkgroup;
 
-import com.healthsys.config.DataAccessManager;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import com.healthsys.service.ICheckGroupService;
 import com.healthsys.service.ICheckItemService;
 import com.healthsys.service.impl.CheckGroupServiceImpl;
@@ -11,11 +23,6 @@ import com.healthsys.view.common.NotificationComponent;
 import com.healthsys.viewmodel.admin.checkgroup.CheckGroupEditViewModel;
 import com.healthsys.viewmodel.admin.checkgroup.CheckGroupManagementViewModel;
 import com.healthsys.viewmodel.common.NotificationViewModel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * 检查组管理主面板

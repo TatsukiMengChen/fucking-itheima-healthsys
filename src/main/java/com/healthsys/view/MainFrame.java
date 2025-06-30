@@ -1,11 +1,29 @@
 package com.healthsys.view;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.healthsys.config.AppContext;
 import com.healthsys.dao.UserMapper;
 import com.healthsys.service.IEmailService;
 import com.healthsys.service.IUserService;
 import com.healthsys.service.impl.EmailServiceImpl;
 import com.healthsys.service.impl.UserServiceImpl;
+import com.healthsys.view.admin.appointment.AdminAppointmentManagementPanel;
 import com.healthsys.view.admin.checkgroup.CheckGroupManagementPanel;
 import com.healthsys.view.admin.checkitem.CheckItemManagementPanel;
 import com.healthsys.view.admin.usermanagement.UserManagementPanel;
@@ -19,13 +37,6 @@ import com.healthsys.view.user.healthdata.UserHealthDataPanel;
 import com.healthsys.view.user.tracking.HealthTrackingPanel;
 import com.healthsys.viewmodel.admin.usermanagement.UserManagementViewModel;
 import com.healthsys.viewmodel.auth.AuthViewModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 /**
  * 应用程序主窗口
@@ -63,6 +74,7 @@ public class MainFrame extends JFrame {
   private HealthTrackingPanel healthTrackingPanel;
   private ResultAnalysisPanel resultAnalysisPanel;
   private UserHealthDataPanel userHealthDataPanel;
+  private AdminAppointmentManagementPanel adminAppointmentManagementPanel;
   private CheckItemManagementPanel checkItemManagementPanel;
   private CheckGroupManagementPanel checkGroupManagementPanel;
   private UserManagementPanel userManagementPanel;
@@ -201,10 +213,8 @@ public class MainFrame extends JFrame {
     // 添加主内容区域
     contentPanel.add(currentViewPanel, BorderLayout.CENTER);
 
-    // 添加状态栏（暂时用标签代替）
-    JLabel statusLabel = new JLabel("请先登录系统");
-    statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-    contentPanel.add(statusLabel, BorderLayout.SOUTH);
+    // 添加状态栏 - 只在未登录时显示提示
+    // 状态栏将在用户登录后动态更新
   }
 
   /**
@@ -313,6 +323,10 @@ public class MainFrame extends JFrame {
         case "userdata":
           setMainContent(getUserHealthDataPanel());
           setTitle("健康管理系统 - 健康数据管理");
+          break;
+        case "adminappointment":
+          setMainContent(getAdminAppointmentManagementPanel());
+          setTitle("健康管理系统 - 预约管理");
           break;
         case "checkitem":
           setMainContent(getCheckItemManagementPanel());
@@ -550,6 +564,16 @@ public class MainFrame extends JFrame {
   }
 
   /**
+   * 获取管理员预约管理面板（懒加载）
+   */
+  private JPanel getAdminAppointmentManagementPanel() {
+    if (adminAppointmentManagementPanel == null) {
+      adminAppointmentManagementPanel = new AdminAppointmentManagementPanel();
+    }
+    return adminAppointmentManagementPanel;
+  }
+
+  /**
    * 获取检查项管理面板（懒加载）
    */
   private JPanel getCheckItemManagementPanel() {
@@ -609,6 +633,7 @@ public class MainFrame extends JFrame {
       healthTrackingPanel = null;
       resultAnalysisPanel = null;
       userHealthDataPanel = null;
+      adminAppointmentManagementPanel = null;
       checkItemManagementPanel = null;
       checkGroupManagementPanel = null;
       userManagementPanel = null;

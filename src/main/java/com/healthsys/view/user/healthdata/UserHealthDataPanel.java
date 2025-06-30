@@ -245,6 +245,22 @@ public class UserHealthDataPanel extends BasePanel {
       }
     });
 
+    // 添加按钮事件
+    addButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        showAddHealthDataDialog();
+      }
+    });
+
+    // 编辑按钮事件
+    editButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        editSelectedData();
+      }
+    });
+
     // 刷新按钮事件
     refreshButton.addActionListener(new ActionListener() {
       @Override
@@ -376,6 +392,45 @@ public class UserHealthDataPanel extends BasePanel {
     if (result == JOptionPane.YES_OPTION) {
       viewModel.deleteHealthDataCommand(resultId);
     }
+  }
+
+  /**
+   * 显示添加健康数据对话框
+   */
+  private void showAddHealthDataDialog() {
+    JOptionPane.showMessageDialog(
+        this,
+        "健康数据添加功能正在开发中。\n" +
+            "根据系统设计，健康数据应该基于预约来管理：\n" +
+            "1. 先在预约管理中选择预约\n" +
+            "2. 完成体检后由管理员添加数据\n" +
+            "3. 然后在此处查看和管理数据",
+        "功能提示",
+        JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  /**
+   * 编辑选中的数据
+   */
+  private void editSelectedData() {
+    int selectedRow = dataTable.getSelectedRow();
+    if (selectedRow < 0) {
+      JOptionPane.showMessageDialog(
+          this,
+          "请先选择要编辑的健康数据记录",
+          "提示",
+          JOptionPane.INFORMATION_MESSAGE);
+      return;
+    }
+
+    Integer resultId = (Integer) tableModel.getValueAt(selectedRow, 0);
+
+    JOptionPane.showMessageDialog(
+        this,
+        "健康数据编辑功能正在开发中。\n" +
+            "选中的记录ID: " + resultId,
+        "功能提示",
+        JOptionPane.INFORMATION_MESSAGE);
   }
 
   /**

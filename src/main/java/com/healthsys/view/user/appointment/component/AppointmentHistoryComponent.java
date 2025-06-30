@@ -1,15 +1,32 @@
 package com.healthsys.view.user.appointment.component;
 
-import com.healthsys.model.entity.Appointment;
-import com.healthsys.viewmodel.user.appointment.AppointmentViewModel;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+
+import com.healthsys.model.entity.Appointment;
+import com.healthsys.model.entity.CheckGroup;
+import com.healthsys.service.ICheckGroupService;
+import com.healthsys.service.impl.CheckGroupServiceImpl;
+import com.healthsys.viewmodel.user.appointment.AppointmentViewModel;
 
 /**
  * 预约历史组件
@@ -20,6 +37,7 @@ import java.util.List;
 public class AppointmentHistoryComponent extends JPanel {
 
   private AppointmentViewModel viewModel;
+  private ICheckGroupService checkGroupService;
 
   // UI组件
   private JTable historyTable;
@@ -36,6 +54,7 @@ public class AppointmentHistoryComponent extends JPanel {
 
   public AppointmentHistoryComponent(AppointmentViewModel viewModel) {
     this.viewModel = viewModel;
+    this.checkGroupService = new CheckGroupServiceImpl();
     initializeComponents();
     setupLayout();
     bindEvents();
@@ -182,6 +201,26 @@ public class AppointmentHistoryComponent extends JPanel {
   }
 
   /**
+   * 获取检查组名称
+   */
+  private String getCheckGroupName(Integer groupId) {
+    if (groupId == null) {
+      return "未知检查组";
+    }
+
+    try {
+      CheckGroup checkGroup = checkGroupService.getCheckGroupById(groupId);
+      if (checkGroup != null) {
+        return checkGroup.getGroupName() + " (" + checkGroup.getGroupCode() + ")";
+      } else {
+        return "检查组_" + groupId + " (已删除)";
+      }
+    } catch (Exception e) {
+      return "检查组_" + groupId + " (加载失败)";
+    }
+  }
+
+  /**
    * 更新表格数据
    */
   private void updateTableData() {
@@ -194,7 +233,7 @@ public class AppointmentHistoryComponent extends JPanel {
       for (Appointment appointment : appointments) {
         Object[] rowData = {
             appointment.getAppointmentId(),
-            "检查组_" + appointment.getGroupId(), // TODO: 显示实际检查组名称
+            getCheckGroupName(appointment.getGroupId()), // 显示实际检查组名称
             appointment.getAppointmentDate(),
             appointment.getAppointmentTime(),
             appointment.getExaminationMethod(),

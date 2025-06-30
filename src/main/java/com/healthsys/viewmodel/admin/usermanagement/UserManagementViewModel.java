@@ -1,20 +1,21 @@
 package com.healthsys.viewmodel.admin.usermanagement;
 
-import com.healthsys.config.AppContext;
-import com.healthsys.model.entity.User;
-import com.healthsys.model.enums.UserRoleEnum;
-import com.healthsys.service.IUserService;
-import com.healthsys.viewmodel.base.BaseViewModel;
-import cn.hutool.core.util.StrUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.SwingWorker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+
+import javax.swing.SwingWorker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.healthsys.config.AppContext;
+import com.healthsys.model.entity.User;
+import com.healthsys.model.enums.UserRoleEnum;
+import com.healthsys.service.IUserService;
+import com.healthsys.viewmodel.base.BaseViewModel;
 
 /**
  * 用户管理ViewModel

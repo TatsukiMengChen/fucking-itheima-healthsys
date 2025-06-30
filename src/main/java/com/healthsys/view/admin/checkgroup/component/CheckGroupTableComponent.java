@@ -1,22 +1,33 @@
 package com.healthsys.view.admin.checkgroup.component;
 
-import com.healthsys.model.entity.CheckGroup;
-import com.healthsys.viewmodel.admin.checkgroup.CheckGroupManagementViewModel;
-import com.healthsys.view.common.PagingComponent;
-
-import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumnModel;
+
+import com.healthsys.model.entity.CheckGroup;
+import com.healthsys.view.common.PagingComponent;
+import com.healthsys.viewmodel.admin.checkgroup.CheckGroupManagementViewModel;
 
 /**
  * 检查组表格组件
@@ -167,10 +178,10 @@ public class CheckGroupTableComponent extends JPanel implements PropertyChangeLi
     setLayout(new BorderLayout(10, 10));
     setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    // 顶部搜索面板
+    // 顶部面板容器
     JPanel topPanel = new JPanel(new BorderLayout(10, 10));
 
-    // 搜索面板
+    // 搜索面板（顶部左侧）
     JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
     searchPanel.add(new JLabel("名称:"));
     searchPanel.add(searchNameField);
@@ -179,15 +190,15 @@ public class CheckGroupTableComponent extends JPanel implements PropertyChangeLi
     searchPanel.add(searchButton);
     searchPanel.add(clearButton);
 
-    // 操作按钮面板
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-    buttonPanel.add(addButton);
-    buttonPanel.add(editButton);
-    buttonPanel.add(deleteButton);
-    buttonPanel.add(refreshButton);
+    // 操作按钮工具栏（顶部右侧）
+    JPanel toolbarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+    toolbarPanel.add(addButton);
+    toolbarPanel.add(editButton);
+    toolbarPanel.add(deleteButton);
+    toolbarPanel.add(refreshButton);
 
     topPanel.add(searchPanel, BorderLayout.WEST);
-    topPanel.add(buttonPanel, BorderLayout.EAST);
+    topPanel.add(toolbarPanel, BorderLayout.EAST);
 
     // 中间表格面板
     JScrollPane scrollPane = new JScrollPane(checkGroupTable);

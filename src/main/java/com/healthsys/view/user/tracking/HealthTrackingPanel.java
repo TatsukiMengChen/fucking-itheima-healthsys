@@ -17,8 +17,6 @@ public class HealthTrackingPanel extends BasePanel {
   private HealthTrackingViewModel viewModel;
 
   // UI组件
-  private JTabbedPane tabbedPane;
-  private JPanel comparisonPanel;
   private JPanel historyPanel;
   private JPanel filterPanel;
 
@@ -43,77 +41,11 @@ public class HealthTrackingPanel extends BasePanel {
    * 初始化组件
    */
   private void initializeComponents() {
-    // 创建选项卡面板
-    tabbedPane = new JTabbedPane();
-
-    // 创建健康对比面板
-    comparisonPanel = createComparisonPanel();
-
-    // 创建病史记录面板
+    // 只创建病史记录面板，不再使用选项卡
     historyPanel = createHistoryPanel();
 
     // 创建筛选面板
     filterPanel = createFilterPanel();
-
-    // 添加选项卡
-    tabbedPane.addTab("健康数据对比", comparisonPanel);
-    tabbedPane.addTab("病史记录", historyPanel);
-  }
-
-  /**
-   * 创建健康对比面板
-   */
-  private JPanel createComparisonPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-    // 创建图表区域（暂时用简单的标签代替）
-    JLabel chartLabel = new JLabel("健康数据对比图表", SwingConstants.CENTER);
-    chartLabel.setPreferredSize(new Dimension(600, 300));
-    chartLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-    chartLabel.setOpaque(true);
-    chartLabel.setBackground(Color.WHITE);
-
-    // 创建图表控制面板
-    JPanel chartControlPanel = createChartControlPanel();
-
-    panel.add(chartControlPanel, BorderLayout.NORTH);
-    panel.add(chartLabel, BorderLayout.CENTER);
-
-    return panel;
-  }
-
-  /**
-   * 创建图表控制面板
-   */
-  private JPanel createChartControlPanel() {
-    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    panel.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
-
-    // 图表类型选择
-    panel.add(new JLabel("图表类型:"));
-    JComboBox<String> chartTypeCombo = new JComboBox<>(viewModel.getChartTypes());
-    panel.add(chartTypeCombo);
-
-    panel.add(Box.createHorizontalStrut(20));
-
-    // 检查项选择
-    panel.add(new JLabel("检查项:"));
-    JComboBox<String> itemCombo = new JComboBox<>();
-    itemCombo.addItem("全部");
-    itemCombo.addItem("血压");
-    itemCombo.addItem("血糖");
-    itemCombo.addItem("体重");
-    panel.add(itemCombo);
-
-    panel.add(Box.createHorizontalStrut(20));
-
-    // 刷新按钮
-    JButton refreshButton = new JButton("刷新图表");
-    refreshButton.addActionListener(e -> viewModel.loadComparisonDataCommand());
-    panel.add(refreshButton);
-
-    return panel;
   }
 
   /**
@@ -232,11 +164,11 @@ public class HealthTrackingPanel extends BasePanel {
     JPanel titlePanel = createTitlePanel();
     add(titlePanel, BorderLayout.NORTH);
 
+    // 直接添加病史记录面板
+    add(historyPanel, BorderLayout.CENTER);
+
     // 添加筛选面板
     add(filterPanel, BorderLayout.SOUTH);
-
-    // 添加主内容区域
-    add(tabbedPane, BorderLayout.CENTER);
   }
 
   /**
@@ -246,11 +178,11 @@ public class HealthTrackingPanel extends BasePanel {
     JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     panel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-    JLabel titleLabel = new JLabel("健康跟踪与分析");
+    JLabel titleLabel = new JLabel("病史记录管理");
     titleLabel.setFont(new Font("微软雅黑", Font.BOLD, 18));
     titleLabel.setForeground(new Color(51, 51, 51));
 
-    JLabel descLabel = new JLabel("查看健康数据趋势，管理病史记录");
+    JLabel descLabel = new JLabel("查看和管理个人病史记录");
     descLabel.setFont(new Font("微软雅黑", Font.PLAIN, 12));
     descLabel.setForeground(new Color(102, 102, 102));
 
@@ -273,14 +205,9 @@ public class HealthTrackingPanel extends BasePanel {
       });
     });
 
-    // 监听选项卡切换
-    tabbedPane.addChangeListener(e -> {
-      int selectedIndex = tabbedPane.getSelectedIndex();
-      if (selectedIndex == 0) { // 健康数据对比
-        viewModel.loadComparisonDataCommand();
-      } else if (selectedIndex == 1) { // 病史记录
-        viewModel.loadMedicalHistoryCommand();
-      }
+    // 自动加载病史记录
+    SwingUtilities.invokeLater(() -> {
+      viewModel.loadMedicalHistoryCommand();
     });
   }
 

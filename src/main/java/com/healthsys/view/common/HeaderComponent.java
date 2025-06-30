@@ -1,11 +1,24 @@
 package com.healthsys.view.common;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.UIManager;
+
 import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.User;
-import com.healthsys.model.enums.UserRoleEnum;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * 顶部标题栏组件

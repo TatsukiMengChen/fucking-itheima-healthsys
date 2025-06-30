@@ -1,5 +1,27 @@
 package com.healthsys.view.admin.checkitem;
 
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
 import com.healthsys.model.entity.CheckItem;
 import com.healthsys.view.admin.checkitem.component.CheckItemEditFormComponent;
 import com.healthsys.view.admin.checkitem.component.CheckItemTableComponent;
@@ -7,14 +29,6 @@ import com.healthsys.view.common.NotificationComponent;
 import com.healthsys.viewmodel.admin.checkitem.CheckItemEditViewModel;
 import com.healthsys.viewmodel.admin.checkitem.CheckItemManagementViewModel;
 import com.healthsys.viewmodel.common.NotificationViewModel;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * 检查项管理主面板
@@ -28,19 +42,13 @@ public class CheckItemManagementPanel extends JPanel {
   private CheckItemEditViewModel editViewModel;
   private NotificationViewModel notificationViewModel;
 
-  // 主要组件
+  // UI组件
   private CheckItemTableComponent tableComponent;
   private NotificationComponent notificationComponent;
 
   // 编辑对话框
   private JDialog editDialog;
   private CheckItemEditFormComponent editFormComponent;
-
-  // 工具栏按钮
-  private JButton addButton;
-  private JButton editButton;
-  private JButton deleteButton;
-  private JButton refreshButton;
 
   /**
    * 构造函数
@@ -74,25 +82,6 @@ public class CheckItemManagementPanel extends JPanel {
 
     // 通知组件
     notificationComponent = new NotificationComponent(notificationViewModel);
-
-    // 工具栏按钮
-    addButton = new JButton("添加");
-    addButton.setPreferredSize(new Dimension(80, 30));
-    addButton.setToolTipText("添加新的检查项");
-
-    editButton = new JButton("编辑");
-    editButton.setPreferredSize(new Dimension(80, 30));
-    editButton.setToolTipText("编辑选中的检查项");
-    editButton.setEnabled(false);
-
-    deleteButton = new JButton("删除");
-    deleteButton.setPreferredSize(new Dimension(80, 30));
-    deleteButton.setToolTipText("删除选中的检查项");
-    deleteButton.setEnabled(false);
-
-    refreshButton = new JButton("刷新");
-    refreshButton.setPreferredSize(new Dimension(80, 30));
-    refreshButton.setToolTipText("刷新检查项列表");
   }
 
   /**
@@ -105,52 +94,11 @@ public class CheckItemManagementPanel extends JPanel {
     // 顶部通知区域
     add(notificationComponent, BorderLayout.NORTH);
 
-    // 中央主要内容区域
-    JPanel mainPanel = createMainPanel();
-    add(mainPanel, BorderLayout.CENTER);
-  }
-
-  /**
-   * 创建主面板
-   */
-  private JPanel createMainPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-
-    // 工具栏
-    JPanel toolbarPanel = createToolbarPanel();
-    panel.add(toolbarPanel, BorderLayout.NORTH);
-
-    // 表格区域
+    // 中央表格区域
     JScrollPane tableScrollPane = new JScrollPane(tableComponent);
     tableScrollPane.setPreferredSize(new Dimension(800, 400));
     tableScrollPane.setBorder(BorderFactory.createTitledBorder("检查项列表"));
-    panel.add(tableScrollPane, BorderLayout.CENTER);
-
-    return panel;
-  }
-
-  /**
-   * 创建工具栏面板
-   */
-  private JPanel createToolbarPanel() {
-    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-    panel.setBorder(BorderFactory.createEtchedBorder());
-
-    // 添加按钮
-    panel.add(addButton);
-    panel.add(editButton);
-    panel.add(deleteButton);
-
-    // 添加分隔符
-    panel.add(Box.createHorizontalStrut(10));
-    JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-    separator.setPreferredSize(new Dimension(1, 20));
-    panel.add(separator);
-    panel.add(Box.createHorizontalStrut(10));
-
-    panel.add(refreshButton);
-
-    return panel;
+    add(tableScrollPane, BorderLayout.CENTER);
   }
 
   /**
@@ -173,13 +121,21 @@ public class CheckItemManagementPanel extends JPanel {
       }
     });
 
-    // 监听表格选择变化
-    tableComponent.addPropertyChangeListener(new PropertyChangeListener() {
+    // 监听管理ViewModel的编辑请求
+    managementViewModel.addPropertyChangeListener(new PropertyChangeListener() {
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
-        if ("selectedCheckItem".equals(evt.getPropertyName())) {
-          updateButtonStates();
-        }
+        SwingUtilities.invokeLater(() -> {
+          String propertyName = evt.getPropertyName();
+          switch (propertyName) {
+            case "addCheckItemRequested":
+              showAddDialog();
+              break;
+            case "editCheckItemRequested":
+              showEditDialog();
+              break;
+          }
+        });
       }
     });
   }
@@ -238,77 +194,18 @@ public class CheckItemManagementPanel extends JPanel {
   }
 
   /**
-   * 更新按钮状态
-   */
-  private void updateButtonStates() {
-    CheckItem selectedItem = tableComponent.getSelectedCheckItem();
-    boolean hasSelection = selectedItem != null;
-
-    editButton.setEnabled(hasSelection);
-    deleteButton.setEnabled(hasSelection);
-  }
-
-  /**
    * 更新加载状态
    */
   private void updateLoadingState() {
     boolean loading = managementViewModel.isLoading();
-
-    // 禁用/启用操作按钮
-    addButton.setEnabled(!loading);
-    editButton.setEnabled(!loading && tableComponent.getSelectedCheckItem() != null);
-    deleteButton.setEnabled(!loading && tableComponent.getSelectedCheckItem() != null);
-    refreshButton.setEnabled(!loading);
-
-    // 更新刷新按钮文本
-    refreshButton.setText(loading ? "加载中..." : "刷新");
+    // 加载状态更新由表格组件内部处理
   }
 
   /**
    * 设置事件监听器
    */
   private void setupEventListeners() {
-    // 添加按钮
-    addButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        showAddDialog();
-      }
-    });
-
-    // 编辑按钮
-    editButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        showEditDialog();
-      }
-    });
-
-    // 删除按钮
-    deleteButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        confirmAndDelete();
-      }
-    });
-
-    // 刷新按钮
-    refreshButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        managementViewModel.refreshData();
-      }
-    });
-
-    // 表格双击编辑
-    tableComponent.addPropertyChangeListener(new PropertyChangeListener() {
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        if ("doubleClicked".equals(evt.getPropertyName())) {
-          showEditDialog();
-        }
-      }
-    });
+    // 事件监听由表格组件内部处理，这里暂时保留为空方法
   }
 
   /**
@@ -385,29 +282,10 @@ public class CheckItemManagementPanel extends JPanel {
   }
 
   /**
-   * 确认并删除
+   * 更新按钮状态
    */
-  private void confirmAndDelete() {
-    CheckItem selectedItem = tableComponent.getSelectedCheckItem();
-    if (selectedItem == null) {
-      notificationViewModel.showWarning("请先选择要删除的检查项");
-      return;
-    }
-
-    // 确认对话框
-    String message = String.format("确定要删除检查项 \"%s\" 吗？\n\n注意：如果此检查项正在被使用，删除操作将失败。",
-        selectedItem.getItemName());
-
-    int result = JOptionPane.showConfirmDialog(
-        this,
-        message,
-        "确认删除",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.WARNING_MESSAGE);
-
-    if (result == JOptionPane.YES_OPTION) {
-      managementViewModel.deleteCheckItem(selectedItem.getItemId());
-    }
+  private void updateButtonStates() {
+    // 按钮状态更新由表格组件内部处理
   }
 
   /**
