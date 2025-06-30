@@ -127,8 +127,10 @@ CREATE INDEX IF NOT EXISTS idx_medical_history_date ON medical_history(diagnosis
 
 -- 插入初始数据（可选）
 -- 1. 插入系统管理员用户
+-- 用户名：MengChen
+-- 密码：Test123
 INSERT INTO users (username, password, email, uname, role) 
-VALUES ('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9P2Wq7DW8QXh.4u', 'admin@healthsys.com', '系统管理员', 'SUPER_ADMIN')
+VALUES ('MengChen', '$2a$10$/yONHiDLT.R9eHCOIw89kej40HheY8JnauaxqLsJ7C7oDnSxkbrBi', 'admin@healthsys.com', '系统管理员', 'SUPER_ADMIN')
 ON CONFLICT (username) DO NOTHING;
 
 -- 2. 插入示例检查项

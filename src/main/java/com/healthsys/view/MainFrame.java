@@ -1,5 +1,12 @@
 package com.healthsys.view;
 
+import com.healthsys.dao.UserMapper;
+import com.healthsys.service.IEmailService;
+import com.healthsys.service.IUserService;
+import com.healthsys.service.impl.EmailServiceImpl;
+import com.healthsys.service.impl.UserServiceImpl;
+import com.healthsys.view.auth.AuthPanel;
+import com.healthsys.viewmodel.auth.AuthViewModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,16 +35,52 @@ public class MainFrame extends JFrame {
   private JPanel contentPanel;
   private JPanel currentViewPanel;
 
+  // 认证相关组件
+  private AuthPanel authPanel;
+  private AuthViewModel authViewModel;
+
+  // 服务层组件
+  private IUserService userService;
+  private IEmailService emailService;
+
   /**
    * 构造函数
    */
   public MainFrame() {
+    initializeServices();
     initializeFrame();
     initializeComponents();
     layoutComponents();
     bindEvents();
 
     logger.info("主窗口初始化完成");
+  }
+
+  /**
+   * 初始化服务层组件
+   */
+  private void initializeServices() {
+    try {
+      // 创建服务实例
+      emailService = new EmailServiceImpl();
+
+      // 初始化数据访问层
+      com.healthsys.config.DataAccessManager dataAccessManager = com.healthsys.config.DataAccessManager.getInstance();
+
+      // 获取UserMapper实例
+      UserMapper userMapper = dataAccessManager.getUserMapper();
+
+      // 创建用户服务
+      userService = new UserServiceImpl(userMapper, emailService);
+
+      logger.info("服务层组件初始化完成");
+    } catch (Exception e) {
+      logger.error("服务层组件初始化失败", e);
+      JOptionPane.showMessageDialog(this,
+          "系统初始化失败：" + e.getMessage(),
+          "错误",
+          JOptionPane.ERROR_MESSAGE);
+    }
   }
 
   /**
@@ -69,10 +112,58 @@ public class MainFrame extends JFrame {
 
     // 创建当前视图面板（用于动态切换不同的功能面板）
     currentViewPanel = new JPanel(new BorderLayout());
-    currentViewPanel.setBorder(BorderFactory.createTitledBorder("系统功能"));
 
-    // 初始显示欢迎信息
-    showWelcomeView();
+    // 初始化认证相关组件
+    initializeAuthComponents();
+
+    // 初始显示认证面板
+    showAuthView();
+  }
+
+  /**
+   * 初始化认证相关组件
+   */
+  private void initializeAuthComponents() {
+    try {
+      // 创建认证ViewModel
+      authViewModel = new AuthViewModel(userService, emailService);
+
+      // 设置认证成功回调（包括登录和注册）
+      authViewModel.setAuthSuccessCallback(user -> {
+        logger.info("用户认证成功: {}", user.getUsername());
+        showMainApplicationView(user);
+      });
+
+      // 设置认证错误回调
+      authViewModel.setAuthErrorCallback(errorMsg -> {
+        logger.error("认证失败: {}", errorMsg);
+        JOptionPane.showMessageDialog(this,
+            "认证失败：" + errorMsg,
+            "错误",
+            JOptionPane.ERROR_MESSAGE);
+      });
+
+      // 设置注册成功回调（在RegistrationViewModel中）
+      authViewModel.getRegistrationViewModel().setRegisterSuccessCallback(() -> {
+        logger.info("用户注册成功");
+        JOptionPane.showMessageDialog(this,
+            "注册成功！请使用新账号登录。",
+            "注册成功",
+            JOptionPane.INFORMATION_MESSAGE);
+        authViewModel.switchToLogin();
+      });
+
+      // 创建认证面板
+      authPanel = new AuthPanel(authViewModel);
+
+      logger.info("认证组件初始化完成");
+    } catch (Exception e) {
+      logger.error("认证组件初始化失败", e);
+      JOptionPane.showMessageDialog(this,
+          "认证组件初始化失败：" + e.getMessage(),
+          "错误",
+          JOptionPane.ERROR_MESSAGE);
+    }
   }
 
   /**
@@ -82,17 +173,11 @@ public class MainFrame extends JFrame {
     // 设置主内容面板
     setContentPane(contentPanel);
 
-    // 添加标题栏（暂时用标签代替，后续会被HeaderComponent替换）
-    JLabel titleLabel = new JLabel("健康管理系统", JLabel.CENTER);
-    titleLabel.setFont(new Font("微软雅黑", Font.BOLD, 18));
-    titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-    contentPanel.add(titleLabel, BorderLayout.NORTH);
-
     // 添加主内容区域
     contentPanel.add(currentViewPanel, BorderLayout.CENTER);
 
     // 添加状态栏（暂时用标签代替）
-    JLabel statusLabel = new JLabel("就绪");
+    JLabel statusLabel = new JLabel("请先登录系统");
     statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
     contentPanel.add(statusLabel, BorderLayout.SOUTH);
   }
@@ -111,7 +196,77 @@ public class MainFrame extends JFrame {
   }
 
   /**
-   * 显示欢迎视图
+   * 显示认证视图
+   */
+  private void showAuthView() {
+    if (authPanel != null) {
+      setCurrentView(authPanel);
+      setTitle("健康管理系统 - 用户认证");
+    } else {
+      // 回退到欢迎视图
+      showWelcomeView();
+    }
+  }
+
+  /**
+   * 显示主应用视图（用户登录后）
+   */
+  private void showMainApplicationView(com.healthsys.model.entity.User user) {
+    // TODO: 创建并显示主应用界面
+    JPanel mainAppPanel = new JPanel(new BorderLayout());
+
+    // 临时显示用户信息
+    JLabel userLabel = new JLabel("<html><div style='text-align: center;'>" +
+        "<h2>欢迎, " + user.getUsername() + "!</h2>" +
+        "<p>用户角色: " + user.getRole() + "</p>" +
+        "<p>邮箱: " + user.getEmail() + "</p>" +
+        "<p>注册时间: " + user.getCreatedAt() + "</p>" +
+        "<hr>" +
+        "<p>主应用界面正在开发中...</p>" +
+        "</div></html>", JLabel.CENTER);
+    userLabel.setFont(new Font("微软雅黑", Font.PLAIN, 14));
+
+    // 添加退出登录按钮
+    JPanel buttonPanel = new JPanel(new FlowLayout());
+    JButton logoutButton = new JButton("退出登录");
+    logoutButton.addActionListener(e -> logout());
+    buttonPanel.add(logoutButton);
+
+    mainAppPanel.add(userLabel, BorderLayout.CENTER);
+    mainAppPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+    setCurrentView(mainAppPanel);
+    setTitle("健康管理系统 - " + user.getUsername());
+    setStatusMessage("用户已登录: " + user.getUsername());
+  }
+
+  /**
+   * 用户退出登录
+   */
+  private void logout() {
+    int option = JOptionPane.showConfirmDialog(
+        this,
+        "确定要退出登录吗？",
+        "确认退出登录",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+
+    if (option == JOptionPane.YES_OPTION) {
+      logger.info("用户退出登录");
+
+      // 重置认证状态
+      if (authPanel != null) {
+        authPanel.reset();
+      }
+
+      // 显示认证面板
+      showAuthView();
+      setStatusMessage("请先登录系统");
+    }
+  }
+
+  /**
+   * 显示欢迎视图（备用）
    */
   private void showWelcomeView() {
     JPanel welcomePanel = new JPanel(new BorderLayout());
@@ -119,29 +274,22 @@ public class MainFrame extends JFrame {
     // 欢迎信息
     JLabel welcomeLabel = new JLabel("<html><div style='text-align: center;'>" +
         "<h2>欢迎使用健康管理系统</h2>" +
-        "<p>系统正在初始化中...</p>" +
-        "<p>请稍候，即将显示登录界面</p>" +
+        "<p>系统初始化遇到问题，请检查配置</p>" +
+        "<p>或联系系统管理员</p>" +
         "</div></html>", JLabel.CENTER);
     welcomeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 
     welcomePanel.add(welcomeLabel, BorderLayout.CENTER);
 
-    // 临时按钮区域（用于测试）
+    // 重试按钮
     JPanel buttonPanel = new JPanel(new FlowLayout());
-    JButton testButton = new JButton("测试按钮");
-    testButton.addActionListener(e -> {
-      JOptionPane.showMessageDialog(this,
-          "系统功能正在开发中...\n\n" +
-              "即将实现的功能：\n" +
-              "• 用户登录注册\n" +
-              "• 检查项管理\n" +
-              "• 检查组管理\n" +
-              "• 健康数据管理\n" +
-              "• 预约与跟踪",
-          "系统信息",
-          JOptionPane.INFORMATION_MESSAGE);
+    JButton retryButton = new JButton("重新初始化");
+    retryButton.addActionListener(e -> {
+      // 重新初始化认证组件
+      initializeAuthComponents();
+      showAuthView();
     });
-    buttonPanel.add(testButton);
+    buttonPanel.add(retryButton);
 
     welcomePanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -176,12 +324,34 @@ public class MainFrame extends JFrame {
     if (option == JOptionPane.YES_OPTION) {
       logger.info("用户确认退出系统");
 
-      // TODO: 执行清理工作
-      // - 关闭数据库连接
-      // - 保存用户设置
-      // - 清理临时文件
+      // 执行清理工作
+      cleanup();
 
       System.exit(0);
+    }
+  }
+
+  /**
+   * 清理资源
+   */
+  private void cleanup() {
+    try {
+      // 清理认证组件
+      if (authPanel != null) {
+        authPanel.dispose();
+      }
+
+      if (authViewModel != null) {
+        authViewModel.dispose();
+      }
+
+      // TODO: 关闭数据库连接
+      // TODO: 保存用户设置
+      // TODO: 清理临时文件
+
+      logger.info("资源清理完成");
+    } catch (Exception e) {
+      logger.error("资源清理失败", e);
     }
   }
 

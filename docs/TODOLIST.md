@@ -94,25 +94,25 @@
 **目标**: 实现一个完整的用户注册和登录流程，作为项目第一个端到端的垂直功能切片。
 
 * **任务 3.1: 认证服务层 (Service)**
-    * [ ] 在 `com.healthsys.service` 包创建 `IUserService.java` 接口，定义 `register`, `login` 等方法。
-    * [ ] 创建 `EmailService.java` 接口，定义 `sendVerificationCode` 方法。
-    * [ ] 在 `com.healthsys.service.impl` 包创建 `UserServiceImpl.java` 和 `EmailServiceImpl.java`。
-        * [ ] `UserServiceImpl`: 实现 `register` (包含密码加密) 和 `login` (包含密码验证) 逻辑，与 `UserMapper` 交互。
-        * [ ] `EmailServiceImpl`: 使用Hutool的 `MailUtil` 实现邮件发送逻辑，配置从 `application.properties` 读取。
+    * [x] 在 `com.healthsys.service` 包创建 `IUserService.java` 接口，定义 `register`, `login` 等方法。
+    * [x] 创建 `EmailService.java` 接口，定义 `sendVerificationCode` 方法。
+    * [x] 在 `com.healthsys.service.impl` 包创建 `UserServiceImpl.java` 和 `EmailServiceImpl.java`。
+        * [x] `UserServiceImpl`: 实现 `register` (包含密码加密) 和 `login` (包含密码验证) 逻辑，与 `UserMapper` 交互。
+        * [x] `EmailServiceImpl`: 使用Hutool的 `MailUtil` 实现邮件发送逻辑，配置从 `application.properties` 读取。
 
 * **任务 3.2: 认证ViewModel层**
-    * [ ] 在 `com.healthsys.viewmodel.auth` 包创建以下ViewModel:
-        * [ ] `LoginViewModel.java`: 包含 `username`, `password` 的可观察属性和 `loginCommand`。`loginCommand` 调用 `IUserService.login()`。
-        * [ ] `RegistrationViewModel.java`: 包含 `email`, `verificationCode`, `username`, `password` 等可观察属性，以及 `sendCodeCommand` 和 `registerCommand`。分别调用 `EmailService` 和 `IUserService`。
-        * [ ] `AuthViewModel.java`: 用于协调 `LoginViewModel` 和 `RegistrationViewModel` 的状态，控制UI显示哪个组件。
+    * [x] 在 `com.healthsys.viewmodel.auth` 包创建以下ViewModel:
+        * [x] `LoginViewModel.java`: 包含 `username`, `password` 的可观察属性和 `loginCommand`。`loginCommand` 调用 `IUserService.login()`。
+        * [x] `RegistrationViewModel.java`: 包含 `email`, `verificationCode`, `username`, `password` 等可观察属性，以及 `sendCodeCommand` 和 `registerCommand`。分别调用 `EmailService` 和 `IUserService`。
+        * [x] `AuthViewModel.java`: 用于协调 `LoginViewModel` 和 `RegistrationViewModel` 的状态，控制UI显示哪个组件。
 
 * **任务 3.3: 认证视图层 (View)**
-    * [ ] 在 `com.healthsys.view.auth.component` 包创建组件：
-        * [ ] `LoginFormComponent.java` (`JPanel`): 包含用户名/密码输入框和登录按钮。将UI事件绑定到 `LoginViewModel` 的命令和属性。
-        * [ ] `RegistrationFormComponent.java` (`JPanel`): 包含所有注册所需UI元素。将UI事件绑定到 `RegistrationViewModel` 的命令和属性。实现发送验证码按钮的倒计时功能。
-    * [ ] 在 `com.healthsys.view.auth` 包创建主视图：
-        * [ ] `AuthPanel.java` (`JPanel`): 作为容器，根据 `AuthViewModel` 的状态，动态添加和显示 `LoginFormComponent` 或 `RegistrationFormComponent`。
-    * [ ] 在 `MainFrame` 中，初始时将 `AuthPanel` 设置为其内容面板。
+    * [x] 在 `com.healthsys.view.auth.component` 包创建组件：
+        * [x] `LoginFormComponent.java` (`JPanel`): 包含用户名/密码输入框和登录按钮。将UI事件绑定到 `LoginViewModel` 的命令和属性。
+        * [x] `RegistrationFormComponent.java` (`JPanel`): 包含所有注册所需UI元素。将UI事件绑定到 `RegistrationViewModel` 的命令和属性。实现发送验证码按钮的倒计时功能。
+    * [x] 在 `com.healthsys.view.auth` 包创建主视图：
+        * [x] `AuthPanel.java` (`JPanel`): 作为容器，根据 `AuthViewModel` 的状态，动态添加和显示 `LoginFormComponent` 或 `RegistrationFormComponent`。
+    * [x] 在 `MainFrame` 中，初始时将 `AuthPanel` 设置为其内容面板。
 
 ### **阶段四：后台管理模块开发 (Phase 4: Admin Modules)**
 

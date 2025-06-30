@@ -1,7 +1,8 @@
 package com.healthsys;
 
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.healthsys.view.MainFrame;
+import com.healthsys.util.ConfigTestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,9 +57,9 @@ public class HealthApp {
    */
   private static void setupLookAndFeel() {
     try {
-      // 使用FlatLaf深色主题
-      UIManager.setLookAndFeel(new FlatDarkLaf());
-      logger.info("成功设置FlatLaf深色主题");
+      // 使用FlatLaf浅色主题
+      UIManager.setLookAndFeel(new FlatLightLaf());
+      logger.info("成功设置FlatLaf浅色主题");
 
       // 可选：设置其他UI属性
       UIManager.put("Button.arc", 5);
@@ -109,6 +110,10 @@ public class HealthApp {
    */
   private static void startApplication() {
     logger.info("正在启动健康管理系统...");
+
+    // 测试配置
+    logger.info("检查系统配置...");
+    ConfigTestUtil.runAllTests();
 
     // 创建并显示主窗口
     MainFrame mainFrame = new MainFrame();

@@ -31,8 +31,10 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.13")
     runtimeOnly("ch.qos.logback:logback-classic:1.5.6")
     
-    // JavaMail API (邮件发送)
-    implementation("com.sun.mail:jakarta.mail:2.0.1")
+    // JavaMail API (邮件发送) - 使用统一的javax.mail版本
+    implementation("javax.mail:javax.mail-api:1.6.2")
+    implementation("com.sun.mail:javax.mail:1.6.2")
+    implementation("javax.activation:activation:1.1.1")
     
     // 连接池 - HikariCP (for database connection pooling)
     implementation("com.zaxxer:HikariCP:5.1.0")
