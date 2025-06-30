@@ -84,4 +84,13 @@ public interface CheckItemMapper extends BaseMapper<CheckItem> {
       "WHERE gci.group_id = #{groupId} AND ci.is_active = true " +
       "ORDER BY ci.created_at DESC")
   List<CheckItem> findByGroupId(@Param("groupId") Integer groupId);
+
+  /**
+   * 检查检查项是否被检查组使用
+   * 
+   * @param itemId 检查项ID
+   * @return 如果被使用返回true，否则返回false
+   */
+  @Select("SELECT COUNT(*) > 0 FROM group_check_item WHERE item_id = #{itemId}")
+  boolean isItemInUse(@Param("itemId") Integer itemId);
 }

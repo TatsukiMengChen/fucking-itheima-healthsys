@@ -109,4 +109,55 @@ public interface CheckGroupMapper extends BaseMapper<CheckGroup> {
    */
   @Select("SELECT item_id FROM group_check_item WHERE group_id = #{groupId}")
   List<Integer> getCheckItemIdsByGroupId(@Param("groupId") Integer groupId);
+
+  /**
+   * 检查检查组名称是否存在（排除指定ID）
+   * 
+   * @param groupName 检查组名称
+   * @param excludeId 排除的ID（可为null）
+   * @return 存在返回true，否则返回false
+   */
+  @Select("<script>" +
+      "SELECT COUNT(*) > 0 FROM check_groups WHERE group_name = #{groupName}" +
+      "<if test='excludeId != null'> AND group_id != #{excludeId}</if>" +
+      "</script>")
+  boolean existsByGroupNameExcludeId(@Param("groupName") String groupName, @Param("excludeId") Integer excludeId);
+
+  /**
+   * 检查检查组代码是否存在（排除指定ID）
+   * 
+   * @param groupCode 检查组代码
+   * @param excludeId 排除的ID（可为null）
+   * @return 存在返回true，否则返回false
+   */
+  @Select("<script>" +
+      "SELECT COUNT(*) > 0 FROM check_groups WHERE group_code = #{groupCode}" +
+      "<if test='excludeId != null'> AND group_id != #{excludeId}</if>" +
+      "</script>")
+  boolean existsByGroupCodeExcludeId(@Param("groupCode") String groupCode, @Param("excludeId") Integer excludeId);
+
+  /**
+   * 检查检查组是否正在被使用（在预约表中）
+   * 
+   * @param groupId 检查组ID
+   * @return 正在被使用返回true，否则返回false
+   */
+  @Select("SELECT COUNT(*) > 0 FROM appointments WHERE group_id = #{groupId}")
+  boolean isGroupInUse(@Param("groupId") Integer groupId);
+
+  /**
+   * 统计检查组总数
+   * 
+   * @return 检查组总数
+   */
+  @Select("SELECT COUNT(*) FROM check_groups")
+  int countCheckGroups();
+
+  /**
+   * 统计启用的检查组数量
+   * 
+   * @return 启用的检查组数量
+   */
+  @Select("SELECT COUNT(*) FROM check_groups WHERE is_active = true")
+  int countActiveCheckGroups();
 }

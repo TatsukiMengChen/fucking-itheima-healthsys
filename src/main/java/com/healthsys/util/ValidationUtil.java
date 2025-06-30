@@ -25,6 +25,7 @@ public class ValidationUtil {
   private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
   private static final String PHONE_REGEX = "^1[3-9]\\d{9}$";
   private static final String USERNAME_REGEX = "^[a-zA-Z0-9_]{3,16}$";
+  private static final String CODE_REGEX = "^[a-zA-Z0-9_]{1,50}$";
 
   /**
    * 私有构造函数，防止实例化
@@ -93,6 +94,28 @@ public class ValidationUtil {
       return isValid;
     } catch (Exception e) {
       logger.error("验证用户名格式时发生错误", e);
+      return false;
+    }
+  }
+
+  /**
+   * 验证代码格式是否正确
+   * 代码要求：1-50位，只能包含字母、数字、下划线
+   * 
+   * @param code 代码
+   * @return 如果格式正确返回true，否则返回false
+   */
+  public static boolean isValidCode(String code) {
+    if (StrUtil.isBlank(code)) {
+      return false;
+    }
+
+    try {
+      boolean isValid = ReUtil.isMatch(CODE_REGEX, code);
+      logger.debug("代码验证结果: {} -> {}", code, isValid);
+      return isValid;
+    } catch (Exception e) {
+      logger.error("验证代码格式时发生错误", e);
       return false;
     }
   }

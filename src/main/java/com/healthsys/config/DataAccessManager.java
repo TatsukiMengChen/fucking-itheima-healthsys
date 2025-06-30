@@ -1,6 +1,8 @@
 package com.healthsys.config;
 
 import com.healthsys.dao.UserMapper;
+import com.healthsys.dao.CheckItemMapper;
+import com.healthsys.dao.CheckGroupMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
@@ -74,6 +76,26 @@ public class DataAccessManager {
   }
 
   /**
+   * 获取CheckItemMapper实例
+   */
+  public CheckItemMapper getCheckItemMapper() {
+    if (sqlSession == null) {
+      throw new RuntimeException("SqlSession未初始化");
+    }
+    return sqlSession.getMapper(CheckItemMapper.class);
+  }
+
+  /**
+   * 获取CheckGroupMapper实例
+   */
+  public CheckGroupMapper getCheckGroupMapper() {
+    if (sqlSession == null) {
+      throw new RuntimeException("SqlSession未初始化");
+    }
+    return sqlSession.getMapper(CheckGroupMapper.class);
+  }
+
+  /**
    * 获取SqlSession
    */
   public SqlSession getSqlSession() {
@@ -127,5 +149,18 @@ public class DataAccessManager {
       initializeMyBatis();
       logger.info("数据访问管理器已重新初始化");
     }
+  }
+
+  // 静态方法，便于在Service中调用
+  public static UserMapper getUserMapperStatic() {
+    return getInstance().getUserMapper();
+  }
+
+  public static CheckItemMapper getCheckItemMapperStatic() {
+    return getInstance().getCheckItemMapper();
+  }
+
+  public static CheckGroupMapper getCheckGroupMapperStatic() {
+    return getInstance().getCheckGroupMapper();
   }
 }

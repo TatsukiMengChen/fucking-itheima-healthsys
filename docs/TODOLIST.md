@@ -119,31 +119,31 @@
 **目标**: 为管理员构建检查项、检查组和用户管理的核心CRUD功能。
 
 * **任务 4.1: 通用组件开发**
-    * [ ] 在 `com.healthsys.view.common` 创建通用UI组件：
-        * [ ] `NotificationComponent.java`: 用于显示全局成功/失败/信息提示。
-        * [ ] `PagingComponent.java`: 用于表格的分页功能。
-    * [ ] 实现其对应的ViewModel（如果需要）。
+    * [x] 在 `com.healthsys.view.common` 创建通用UI组件：
+        * [x] `NotificationComponent.java`: 用于显示全局成功/失败/信息提示。
+        * [x] `PagingComponent.java`: 用于表格的分页功能。
+    * [x] 实现其对应的ViewModel（如果需要）。
 
 * **任务 4.2: 检查项管理模块 (`CheckItemManagement`)**
-    * [ ] **Service**: 在 `ICheckItemService` 和 `CheckItemServiceImpl` 中实现 `add`, `delete`, `update`, `query` (支持分页和搜索) 方法。
-    * [ ] **ViewModel**:
-        * [ ] `CheckItemManagementViewModel.java`: 管理检查项列表 (`ObservableList`)、搜索条件、分页信息，并包含 `search`, `add`, `edit`, `delete` 命令。
-        * [ ] `CheckItemEditViewModel.java`: 管理单个检查项实体，用于新建或编辑，并包含 `submit` 命令。
-    * [ ] **View**:
-        * [ ] `CheckItemTableComponent.java`: 使用 `JTable` 显示数据，包含搜索框和操作按钮。与 `CheckItemManagementViewModel` 绑定。
-        * [ ] `CheckItemEditFormComponent.java`: 一个表单 `JPanel`，用于输入检查项信息。与 `CheckItemEditViewModel` 绑定。
-        * [ ] `CheckItemManagementPanel.java`: 组合 `CheckItemTableComponent` 和（在对话框中弹出的）`CheckItemEditFormComponent`，构成完整页面。
+    * [x] **Service**: 在 `ICheckItemService` 和 `CheckItemServiceImpl` 中实现 `add`, `delete`, `update`, `query` (支持分页和搜索) 方法。
+    * [x] **ViewModel**:
+        * [x] `CheckItemManagementViewModel.java`: 管理检查项列表 (`ObservableList`)、搜索条件、分页信息，并包含 `search`, `add`, `edit`, `delete` 命令。
+        * [x] `CheckItemEditViewModel.java`: 管理单个检查项实体，用于新建或编辑，并包含 `submit` 命令。
+    * [x] **View**:
+        * [x] `CheckItemTableComponent.java`: 使用 `JTable` 显示数据，包含搜索框和操作按钮。与 `CheckItemManagementViewModel` 绑定。
+        * [x] `CheckItemEditFormComponent.java`: 一个表单 `JPanel`，用于输入检查项信息。与 `CheckItemEditViewModel` 绑定。
+        * [x] `CheckItemManagementPanel.java`: 组合 `CheckItemTableComponent` 和（在对话框中弹出的）`CheckItemEditFormComponent`，构成完整页面。
 
 * **任务 4.3: 检查组管理模块 (`CheckGroupManagement`)**
-    * [ ] **Service**: 在 `ICheckGroupService` 和 `CheckGroupServiceImpl` 中实现 `add`, `delete`, `update`, `query` 方法。注意处理与 `group_check_item` 关联表的事务性操作。
-    * [ ] **ViewModel**:
-        * [ ] `CheckGroupManagementViewModel.java`: 类似于检查项的管理VM。
-        * [ ] `CheckGroupEditViewModel.java`: 管理检查组实体和其关联的检查项ID列表。
-    * [ ] **View**:
-        * [ ] `CheckGroupTableComponent.java`: 显示检查组列表。
-        * [ ] `CheckItemSelectorComponent.java` (可复用): 一个带有复选框的检查项列表，用于在创建/编辑检查组时选择检查项。
-        * [ ] `CheckGroupEditFormComponent.java`: 包含基本信息输入和 `CheckItemSelectorComponent`。
-        * [ ] `CheckGroupManagementPanel.java`: 组合以上组件。
+    * [x] **Service**: 在 `ICheckGroupService` 和 `CheckGroupServiceImpl` 中实现 `add`, `delete`, `update`, `query` 方法。注意处理与 `group_check_item` 关联表的事务性操作。
+    * [x] **ViewModel**:
+        * [x] `CheckGroupManagementViewModel.java`: 类似于检查项的管理VM。
+        * [x] `CheckGroupEditViewModel.java`: 管理检查组实体和其关联的检查项ID列表。
+    * [x] **View**:
+        * [x] `CheckGroupTableComponent.java`: 显示检查组列表。
+        * [x] `CheckItemSelectorComponent.java` (可复用): 一个带有复选框的检查项列表，用于在创建/编辑检查组时选择检查项。
+        * [x] `CheckGroupEditFormComponent.java`: 包含基本信息输入和 `CheckItemSelectorComponent`。
+        * [x] `CheckGroupManagementPanel.java`: 组合以上组件。
 
 * **任务 4.4: 用户管理模块 (`UserManagement`)**
     * [ ] **Service**: 在 `IUserService` 和 `UserServiceImpl` 中添加 `addOrUpdateUser`, `deleteUser`, `queryUsers` (支持分页和搜索) 方法。
