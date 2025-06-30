@@ -12,11 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * 日期工具类
- * 提供日期格式化、计算等功能
- * 使用Hutool的日期工具实现
+ * 日期工具类。
+ * 提供日期格式化、转换等常用方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class DateUtil {
 

@@ -11,10 +11,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * 管理员预约管理主面板
- * 整合预约管理的各个组件，提供完整的预约管理界面
+ * 管理员预约管理主面板。
+ * 整合预约管理的各个组件，提供完整的预约管理界面。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AdminAppointmentManagementPanel extends JPanel implements PropertyChangeListener {
 

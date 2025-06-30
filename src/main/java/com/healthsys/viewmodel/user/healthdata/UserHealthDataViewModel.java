@@ -22,10 +22,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.HashMap;
 
 /**
- * 用户健康数据管理ViewModel
- * 管理用户自主录入的健康数据
+ * 用户健康数据视图模型。
+ * 负责健康数据的加载、筛选与交互逻辑。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class UserHealthDataViewModel extends BaseViewModel {
 

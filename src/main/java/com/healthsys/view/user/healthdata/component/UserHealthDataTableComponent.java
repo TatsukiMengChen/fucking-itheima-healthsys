@@ -17,7 +17,7 @@ import java.util.List;
  * 用户健康数据表格组件
  * 负责显示健康数据列表和处理表格相关操作
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class UserHealthDataTableComponent extends JPanel {
 

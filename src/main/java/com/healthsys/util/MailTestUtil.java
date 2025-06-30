@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 邮件测试工具类
- * 用于独立测试邮件发送功能
+ * 邮件测试工具类。
+ * 用于测试邮件发送功能。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class MailTestUtil {
 

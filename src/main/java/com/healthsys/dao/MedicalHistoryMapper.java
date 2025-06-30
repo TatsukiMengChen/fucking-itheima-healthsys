@@ -11,10 +11,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * 病史记录数据访问接口
- * 继承MyBatis-Plus的BaseMapper，提供基础CRUD操作
+ * 病史数据访问接口。
+ * 提供用户病史相关的数据库操作方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Mapper
 public interface MedicalHistoryMapper extends BaseMapper<MedicalHistory> {

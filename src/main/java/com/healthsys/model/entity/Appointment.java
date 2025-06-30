@@ -10,10 +10,10 @@ import java.time.LocalTime;
 import java.time.LocalDateTime;
 
 /**
- * 预约实体类
- * 对应数据库appointments表
+ * 预约实体类。
+ * 表示用户预约信息。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Data
 @NoArgsConstructor

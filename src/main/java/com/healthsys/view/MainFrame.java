@@ -38,10 +38,10 @@ import com.healthsys.viewmodel.admin.usermanagement.UserManagementViewModel;
 import com.healthsys.viewmodel.auth.AuthViewModel;
 
 /**
- * 应用程序主窗口
- * 作为所有UI组件的容器，负责整体界面布局和导航
+ * 健康管理系统主窗口。
+ * 作为所有 UI 组件的容器，负责整体界面布局、导航与主流程控制。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class MainFrame extends JFrame {
 

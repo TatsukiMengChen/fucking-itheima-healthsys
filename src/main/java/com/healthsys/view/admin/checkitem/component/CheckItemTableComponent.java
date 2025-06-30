@@ -18,9 +18,9 @@ import java.util.List;
 
 /**
  * 检查项表格组件
- * 使用JTable显示数据，包含搜索框和操作按钮
+ * 使用 JTable 展示检查项数据，支持搜索和操作。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckItemTableComponent extends JPanel {
 

@@ -24,9 +24,9 @@ import com.healthsys.viewmodel.admin.checkitem.CheckItemEditViewModel;
 
 /**
  * 检查项编辑表单组件
- * 用于输入检查项信息，与CheckItemEditViewModel绑定
+ * 用于输入和编辑检查项信息，支持与 CheckItemEditViewModel 绑定。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckItemEditFormComponent extends JPanel {
 

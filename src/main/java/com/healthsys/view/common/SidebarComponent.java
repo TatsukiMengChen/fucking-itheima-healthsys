@@ -23,10 +23,10 @@ import com.healthsys.model.enums.UserRoleEnum;
 import com.healthsys.util.IconUtil;
 
 /**
- * 左侧导航栏组件
- * 根据用户角色显示不同的导航选项
+ * 侧边栏组件。
+ * 提供主导航入口。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class SidebarComponent extends JPanel {

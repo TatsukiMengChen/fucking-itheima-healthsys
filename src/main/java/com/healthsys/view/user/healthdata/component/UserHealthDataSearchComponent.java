@@ -20,7 +20,7 @@ import java.util.List;
  * 用户健康数据搜索组件
  * 负责搜索条件输入和搜索操作，包含预约选择功能
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class UserHealthDataSearchComponent extends JPanel {
 

@@ -11,10 +11,10 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * 数据库配置类
- * 负责创建和管理数据库连接池
+ * 数据库配置类。
+ * 配置数据源和 MyBatis 相关参数。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class DatabaseConfig {
 

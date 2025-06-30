@@ -11,10 +11,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * 预约数据访问接口
- * 继承MyBatis-Plus的BaseMapper，提供基础CRUD操作
+ * 预约数据访问接口。
+ * 提供预约相关的数据库操作方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Mapper
 public interface AppointmentMapper extends BaseMapper<Appointment> {

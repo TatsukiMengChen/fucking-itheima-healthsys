@@ -16,8 +16,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 邮件服务实现类
- * 使用Hutool的MailUtil实现邮件发送功能
+ * 邮件服务实现。
+ * 实现邮件发送与验证码相关的业务逻辑。
+ * 
+ * @author 梦辰
  */
 public class EmailServiceImpl implements IEmailService {
 

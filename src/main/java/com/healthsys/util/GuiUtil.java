@@ -8,10 +8,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * GUI工具类
- * 提供Swing界面相关的实用方法
+ * GUI 工具类。
+ * 提供 Swing 相关的便捷方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class GuiUtil {
 

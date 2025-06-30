@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 预约ViewModel
- * 管理预约表单数据、预约历史列表，并提供相关命令
+ * 用户预约视图模型。
+ * 负责预约数据的加载与交互。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AppointmentViewModel extends BaseViewModel {
 

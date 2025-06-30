@@ -32,7 +32,7 @@ import com.healthsys.viewmodel.user.appointment.AppointmentViewModel;
  * 预约历史组件
  * 显示用户的预约历史记录
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AppointmentHistoryComponent extends JPanel {
 

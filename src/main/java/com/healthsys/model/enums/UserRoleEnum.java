@@ -1,10 +1,10 @@
 package com.healthsys.model.enums;
 
 /**
- * 用户角色枚举
- * 定义系统中的用户角色类型
+ * 用户角色枚举。
+ * 定义系统支持的用户角色类型。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public enum UserRoleEnum {
 

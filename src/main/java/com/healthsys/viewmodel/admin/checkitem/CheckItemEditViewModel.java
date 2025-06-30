@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 检查项编辑ViewModel
- * 管理单个检查项实体的新建和编辑操作
+ * 检查项编辑视图模型。
+ * 支持体检项目的编辑与校验。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckItemEditViewModel extends BaseViewModel {
 

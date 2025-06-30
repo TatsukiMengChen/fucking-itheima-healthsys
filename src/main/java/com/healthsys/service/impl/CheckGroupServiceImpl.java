@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 检查组服务实现类
- * 实现检查组的完整CRUD操作和业务逻辑
+ * 检查组服务实现。
+ * 实现体检分组相关的业务逻辑。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckGroupServiceImpl implements ICheckGroupService {
 

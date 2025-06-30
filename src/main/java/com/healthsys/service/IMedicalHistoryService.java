@@ -4,10 +4,10 @@ import com.healthsys.model.entity.MedicalHistory;
 import java.util.List;
 
 /**
- * 病史服务接口
- * 提供病史记录的相关业务逻辑
+ * 病史服务接口。
+ * 定义用户病史相关的业务操作。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public interface IMedicalHistoryService {
 

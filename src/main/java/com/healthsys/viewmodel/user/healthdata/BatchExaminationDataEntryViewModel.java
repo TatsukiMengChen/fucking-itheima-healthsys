@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 批量体检数据录入ViewModel
- * 管理检查项列表、输入数据、验证状态，实现批量保存命令和相关业务逻辑
+ * 批量体检数据录入视图模型。
+ * 支持批量录入体检数据的业务逻辑。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class BatchExaminationDataEntryViewModel extends BaseViewModel {
 

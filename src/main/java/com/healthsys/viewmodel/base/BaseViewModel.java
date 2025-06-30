@@ -4,8 +4,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * ViewModel基类
- * 提供属性变更通知机制，支持数据绑定
+ * 视图模型基类。
+ * 提供属性变更通知等通用功能。
+ * 
+ * @author 梦辰
  */
 public abstract class BaseViewModel {
 

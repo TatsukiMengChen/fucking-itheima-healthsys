@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 检查组管理ViewModel
- * 管理检查组列表、搜索条件、分页信息和相关命令
+ * 检查组管理视图模型。
+ * 管理体检分组的增删改查逻辑。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckGroupManagementViewModel extends BaseViewModel {
 

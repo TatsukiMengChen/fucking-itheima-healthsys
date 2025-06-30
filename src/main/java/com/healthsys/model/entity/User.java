@@ -9,10 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 用户实体类
- * 对应数据库users表
+ * 用户实体类。
+ * 表示系统中的用户信息。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Data
 @NoArgsConstructor

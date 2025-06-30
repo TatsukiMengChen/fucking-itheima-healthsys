@@ -6,10 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * 加载状态组件
- * 提供美观的加载动画和提示信息
+ * 加载动画组件。
+ * 显示加载中状态。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class LoadingComponent extends JPanel {

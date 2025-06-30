@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 体检结果服务实现类
+ * 体检结果服务实现。
+ * 实现体检结果相关的业务逻辑。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class ExaminationResultServiceImpl implements IExaminationResultService {
 

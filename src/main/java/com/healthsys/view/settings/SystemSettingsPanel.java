@@ -25,10 +25,10 @@ import com.healthsys.model.entity.User;
 import com.healthsys.view.base.BasePanel;
 
 /**
- * 系统设置面板
- * 提供基本的系统配置和用户偏好设置
+ * 系统设置面板。
+ * 提供系统参数配置界面。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class SystemSettingsPanel extends BasePanel {

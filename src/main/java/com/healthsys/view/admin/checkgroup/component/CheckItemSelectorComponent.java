@@ -28,10 +28,10 @@ import javax.swing.table.TableColumn;
 import com.healthsys.model.entity.CheckItem;
 
 /**
- * 检查项选择器组件
- * 用于在创建/编辑检查组时选择检查项
+ * 检查项选择器组件。
+ * 用于在创建/编辑检查组时选择检查项。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckItemSelectorComponent extends JPanel {
 

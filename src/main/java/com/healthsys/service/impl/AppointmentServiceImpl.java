@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 预约服务实现类
+ * 预约服务实现。
+ * 实现预约相关的业务逻辑。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AppointmentServiceImpl implements IAppointmentService {
 

@@ -9,10 +9,10 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * 体检结果分析主面板
- * 组合结果显示组件和分析建议组件
+ * 体检结果分析面板。
+ * 展示用户体检结果的分析信息。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class ResultAnalysisPanel extends BasePanel {
 

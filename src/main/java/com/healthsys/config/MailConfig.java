@@ -10,10 +10,10 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * 邮件配置类
- * 负责加载和管理邮件服务配置
+ * 邮件服务配置类。
+ * 配置邮件发送相关参数。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class MailConfig {
 

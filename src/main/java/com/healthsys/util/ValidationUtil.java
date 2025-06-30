@@ -11,11 +11,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 /**
- * 验证工具类
- * 提供各种数据格式验证功能
- * 使用Hutool的验证工具实现
+ * 验证工具类。
+ * 提供各种数据格式验证功能，基于 Hutool 工具。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class ValidationUtil {
 

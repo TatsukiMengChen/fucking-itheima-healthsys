@@ -32,7 +32,7 @@ import com.healthsys.viewmodel.user.appointment.AppointmentViewModel;
  * 预约表单组件
  * 包含检查组下拉框、日期选择器等，用于提交新预约
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AppointmentFormComponent extends JPanel implements PropertyChangeListener {
 

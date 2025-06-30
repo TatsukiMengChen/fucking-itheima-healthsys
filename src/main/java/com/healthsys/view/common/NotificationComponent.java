@@ -11,10 +11,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * 通用通知组件
- * 用于显示全局成功/失败/信息提示
+ * 通知组件。
+ * 展示系统通知信息。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class NotificationComponent extends JPanel {
 

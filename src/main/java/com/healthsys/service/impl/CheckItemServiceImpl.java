@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 检查项服务实现类
+ * 检查项服务实现。
+ * 实现体检项目相关的业务逻辑。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckItemServiceImpl implements ICheckItemService {
 

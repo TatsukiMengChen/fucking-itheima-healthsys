@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 体检结果分析ViewModel
- * 管理选定的体检结果详情，并包含生成分析和建议的逻辑
+ * 体检结果分析视图模型。
+ * 负责体检结果分析数据的加载与处理。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class ResultAnalysisViewModel extends BaseViewModel {
 

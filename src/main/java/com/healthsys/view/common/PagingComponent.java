@@ -9,10 +9,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
- * 通用分页组件
- * 用于表格的分页功能
+ * 分页组件。
+ * 支持数据分页显示与切换。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class PagingComponent extends JPanel {
 

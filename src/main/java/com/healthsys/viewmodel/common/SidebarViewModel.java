@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 侧边栏ViewModel
- * 管理导航菜单的显示逻辑和权限控制
+ * 侧边栏视图模型。
+ * 管理侧边栏导航按钮和状态。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class SidebarViewModel extends BaseViewModel {

@@ -8,10 +8,10 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 /**
- * 检查项实体类
- * 对应数据库check_items表
+ * 检查项实体类。
+ * 表示体检项目的基本信息。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Data
 @NoArgsConstructor

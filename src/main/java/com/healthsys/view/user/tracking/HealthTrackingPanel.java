@@ -7,10 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * 健康跟踪主面板
- * 组合图表组件和病史列表组件
+ * 健康跟踪面板。
+ * 展示用户健康跟踪数据。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class HealthTrackingPanel extends BasePanel {
 

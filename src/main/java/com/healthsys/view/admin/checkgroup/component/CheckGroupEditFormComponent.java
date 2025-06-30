@@ -24,10 +24,10 @@ import javax.swing.UIManager;
 import com.healthsys.viewmodel.admin.checkgroup.CheckGroupEditViewModel;
 
 /**
- * 检查组编辑表单组件
- * 包含基本信息输入和检查项选择器
+ * 检查组编辑表单组件。
+ * 包含基本信息输入和检查项选择器。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckGroupEditFormComponent extends JPanel implements PropertyChangeListener {
 

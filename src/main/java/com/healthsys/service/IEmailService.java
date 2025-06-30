@@ -1,8 +1,10 @@
 package com.healthsys.service;
 
 /**
- * 邮件服务接口
- * 提供邮件发送相关功能，主要用于验证码发送
+ * 邮件服务接口。
+ * 定义邮件发送与验证码相关的业务操作。
+ * 
+ * @author 梦辰
  */
 public interface IEmailService {
 

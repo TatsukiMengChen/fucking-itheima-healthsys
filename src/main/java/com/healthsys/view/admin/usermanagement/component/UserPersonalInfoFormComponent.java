@@ -13,7 +13,9 @@ import java.time.format.DateTimeParseException;
 
 /**
  * 用户个人信息表单组件
- * 包含姓名、电话、性别、生日、身份证、地址等个人信息字段
+ * 包含姓名、电话、性别、生日、身份证、地址等个人信息字段。
+ *
+ * @author 梦辰
  */
 public class UserPersonalInfoFormComponent extends JPanel implements PropertyChangeListener {
 

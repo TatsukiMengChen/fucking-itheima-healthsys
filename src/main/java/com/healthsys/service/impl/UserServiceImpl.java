@@ -17,8 +17,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 用户服务实现类
- * 提供用户注册、登录、管理等业务逻辑实现
+ * 用户服务实现。
+ * 实现用户相关的业务逻辑。
+ * 
+ * @author 梦辰
  */
 public class UserServiceImpl implements IUserService {
 

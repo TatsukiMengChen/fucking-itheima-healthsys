@@ -10,10 +10,10 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 检查项数据访问接口
- * 继承MyBatis-Plus的BaseMapper，提供基础CRUD操作
+ * 检查项数据访问接口。
+ * 提供体检项目相关的数据库操作方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Mapper
 public interface CheckItemMapper extends BaseMapper<CheckItem> {

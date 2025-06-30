@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
  * 用户健康数据工具栏组件
  * 负责操作按钮和状态显示
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class UserHealthDataToolbarComponent extends JPanel {
 

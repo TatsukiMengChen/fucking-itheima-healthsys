@@ -11,8 +11,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * 用户基本信息表单组件
- * 包含用户名、密码、邮箱等基本登录信息
+ * 用户基本信息表单组件。
+ * 用于录入和校验用户名、密码、邮箱等登录信息，支持新增和编辑两种模式。
+ *
+ * @author 梦辰
  */
 public class UserBasicInfoFormComponent extends JPanel implements PropertyChangeListener {
 
@@ -51,7 +53,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 初始化UI组件
+   * 初始化UI组件，包括标签、输入框和校验提示。
    */
   private void initializeComponents() {
     // 创建标签
@@ -83,9 +85,9 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 创建验证状态标签
+   * 创建用于显示校验结果的标签。
    *
-   * @return 验证状态标签
+   * @return 校验状态标签
    */
   private JLabel createValidationLabel() {
     JLabel label = new JLabel(" ");
@@ -95,7 +97,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 设置标签样式
+   * 设置标签字体和必填项颜色。
    */
   private void setupLabelStyles() {
     Font labelFont = new Font("微软雅黑", Font.PLAIN, 12);
@@ -114,7 +116,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 设置布局
+   * 配置表单布局和分组。
    */
   private void setupLayout() {
     setLayout(new GridBagLayout());
@@ -192,7 +194,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 设置事件监听器
+   * 绑定输入框失焦事件，实现实时校验。
    */
   private void setupEventListeners() {
     // 用户名验证
@@ -230,7 +232,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 设置数据绑定
+   * 绑定ViewModel，实现数据同步。
    */
   private void setupDataBinding() {
     // 监听ViewModel属性变化
@@ -244,7 +246,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 设置输入框变化监听
+   * 监听输入变化，实时同步到ViewModel。
    */
   private void setupInputListeners() {
     usernameField.getDocument().addDocumentListener(new SimpleDocumentListener(() -> {
@@ -265,7 +267,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 从ViewModel更新UI
+   * 根据ViewModel内容刷新表单。
    */
   private void updateFromViewModel() {
     usernameField.setText(viewModel.getUsername());
@@ -282,10 +284,10 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
     }
   }
 
-  // 验证方法
+  // 校验方法
 
   /**
-   * 验证用户名
+   * 校验用户名输入。
    */
   private void validateUsername() {
     String username = usernameField.getText().trim();
@@ -302,7 +304,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 验证密码
+   * 校验密码输入。
    */
   private void validatePassword() {
     String password = new String(passwordField.getPassword());
@@ -323,7 +325,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 验证确认密码
+   * 校验确认密码输入。
    */
   private void validateConfirmPassword() {
     String password = new String(passwordField.getPassword());
@@ -343,7 +345,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 验证邮箱
+   * 校验邮箱输入。
    */
   private void validateEmail() {
     String email = emailField.getText().trim();
@@ -358,7 +360,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 简单的邮箱格式验证
+   * 简单邮箱格式校验。
    *
    * @param email 邮箱地址
    * @return 是否有效
@@ -368,7 +370,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
         email.indexOf("@") < email.lastIndexOf(".");
   }
 
-  // 验证状态显示方法
+  // 校验状态显示方法
 
   private void showValidationError(JLabel label, String message) {
     label.setText("✗ " + message);
@@ -391,7 +393,7 @@ public class UserBasicInfoFormComponent extends JPanel implements PropertyChange
   }
 
   /**
-   * 简单的文档监听器
+   * 简单的文档监听器，便于输入框变化时触发回调。
    */
   private static class SimpleDocumentListener implements javax.swing.event.DocumentListener {
     private final Runnable action;

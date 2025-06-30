@@ -4,8 +4,10 @@ import com.healthsys.model.entity.User;
 import com.healthsys.model.enums.UserRoleEnum;
 
 /**
- * 用户服务接口
- * 提供用户注册、登录、管理等核心业务方法
+ * 用户服务接口。
+ * 定义用户相关的业务操作。
+ * 
+ * @author 梦辰
  */
 public interface IUserService {
 

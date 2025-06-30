@@ -8,10 +8,10 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 /**
- * 检查组实体类
- * 对应数据库check_groups表
+ * 检查组实体类。
+ * 用于分组管理体检项目。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Data
 @NoArgsConstructor

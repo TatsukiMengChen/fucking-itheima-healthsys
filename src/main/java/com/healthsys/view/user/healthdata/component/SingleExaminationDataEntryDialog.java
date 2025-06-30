@@ -19,7 +19,7 @@ import java.util.List;
  * 单项体检数据录入对话框
  * 允许管理员选择当前预约检查组中的检查项并录入单条数据记录
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class SingleExaminationDataEntryDialog extends JDialog {
 

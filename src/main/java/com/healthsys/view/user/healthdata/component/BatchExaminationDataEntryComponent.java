@@ -17,7 +17,7 @@ import java.util.Map;
  * 批量检查项数据录入组件
  * 显示检查组包含的所有检查项，允许批量录入体检数据
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class BatchExaminationDataEntryComponent extends JPanel {
 

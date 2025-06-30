@@ -16,7 +16,9 @@ import java.awt.*;
 
 /**
  * 用户管理主面板
- * 组合用户表格和编辑功能，提供完整的用户管理界面
+ * 组合用户表格和编辑功能，提供完整的用户管理界面。
+ * 
+ * @author 梦辰
  */
 public class UserManagementPanel extends JPanel {
 

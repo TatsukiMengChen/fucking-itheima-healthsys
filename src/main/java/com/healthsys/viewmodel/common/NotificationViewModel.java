@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 通知组件的ViewModel
- * 管理通知状态和消息
+ * 通知视图模型。
+ * 管理系统通知的展示与交互。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class NotificationViewModel extends BaseViewModel {
 

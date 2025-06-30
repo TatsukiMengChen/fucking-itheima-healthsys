@@ -15,10 +15,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * 管理员预约管理表格组件
- * 显示所有用户的预约记录，支持搜索、筛选和状态管理
+ * 管理员预约管理表格组件。
+ * 显示所有用户的预约记录，支持搜索、筛选和状态管理。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AdminAppointmentTableComponent extends JPanel implements PropertyChangeListener {
 

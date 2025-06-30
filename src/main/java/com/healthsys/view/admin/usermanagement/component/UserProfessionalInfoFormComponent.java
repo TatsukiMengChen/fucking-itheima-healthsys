@@ -11,7 +11,9 @@ import java.util.List;
 
 /**
  * 用户专业信息表单组件
- * 包含科室、职级、角色等专业信息字段
+ * 包含科室、职级、角色等专业信息字段。
+ *
+ * @author 梦辰
  */
 public class UserProfessionalInfoFormComponent extends JPanel implements PropertyChangeListener {
 

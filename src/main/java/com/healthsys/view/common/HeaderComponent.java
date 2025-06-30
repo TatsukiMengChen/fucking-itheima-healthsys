@@ -21,10 +21,10 @@ import com.healthsys.config.AppContext;
 import com.healthsys.model.entity.User;
 
 /**
- * 顶部标题栏组件
- * 显示应用标题、当前用户信息和系统时间
+ * 顶部信息栏组件。
+ * 展示用户信息和全局操作入口。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class HeaderComponent extends JPanel {

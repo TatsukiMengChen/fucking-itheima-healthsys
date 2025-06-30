@@ -25,10 +25,10 @@ import com.healthsys.viewmodel.admin.checkgroup.CheckGroupManagementViewModel;
 import com.healthsys.viewmodel.common.NotificationViewModel;
 
 /**
- * 检查组管理主面板
- * 组合表格组件和表单组件，提供完整的检查组管理功能
+ * 检查组管理面板。
+ * 管理体检分组的增删改查界面。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckGroupManagementPanel extends JPanel implements PropertyChangeListener {
 

@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
  * 健康数据编辑表单组件
  * 用于添加或编辑健康数据记录
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class UserHealthDataEditFormComponent extends JDialog {
 

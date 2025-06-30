@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 
 /**
- * 健康管理系统主入口类
- * 负责应用程序的启动和初始化
+ * 健康管理系统主程序入口。
+ * 启动应用并初始化主界面。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class HealthApp {
 

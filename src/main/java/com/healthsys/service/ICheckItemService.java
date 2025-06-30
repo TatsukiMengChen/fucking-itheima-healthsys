@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.util.List;
 
 /**
- * 检查项服务接口
- * 提供检查项的增删改查功能
+ * 检查项服务接口。
+ * 定义体检项目相关的业务操作。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public interface ICheckItemService {
 

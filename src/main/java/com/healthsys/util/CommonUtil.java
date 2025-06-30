@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 通用工具类
- * 提供常用的业务相关工具方法
+ * 通用工具类。
+ * 提供常用的静态工具方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class CommonUtil {
 

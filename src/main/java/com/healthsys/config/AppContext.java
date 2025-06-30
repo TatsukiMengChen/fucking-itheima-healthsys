@@ -4,10 +4,10 @@ import com.healthsys.model.entity.User;
 import com.healthsys.model.enums.UserRoleEnum;
 
 /**
- * 应用程序上下文管理类
- * 用于管理全局的用户状态和应用程序状态
+ * 应用上下文。
+ * 管理全局用户状态和应用级配置。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class AppContext {

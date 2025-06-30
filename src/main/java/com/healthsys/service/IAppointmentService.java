@@ -4,10 +4,10 @@ import com.healthsys.model.entity.Appointment;
 import java.util.List;
 
 /**
- * 预约服务接口
- * 提供预约体检的相关业务逻辑
+ * 预约服务接口。
+ * 定义预约相关的业务操作。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public interface IAppointmentService {
 

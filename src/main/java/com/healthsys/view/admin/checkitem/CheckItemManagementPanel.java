@@ -31,10 +31,10 @@ import com.healthsys.viewmodel.admin.checkitem.CheckItemManagementViewModel;
 import com.healthsys.viewmodel.common.NotificationViewModel;
 
 /**
- * 检查项管理主面板
- * 组合表格组件和表单组件，实现完整的检查项管理功能
+ * 检查项管理面板。
+ * 管理体检项目的增删改查界面。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckItemManagementPanel extends JPanel {
 

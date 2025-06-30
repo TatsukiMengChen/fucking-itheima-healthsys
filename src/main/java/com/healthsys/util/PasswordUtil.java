@@ -7,11 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 密码工具类
- * 提供密码加密、验证等功能
- * 使用Hutool的加密工具实现
+ * 密码工具类。
+ * 提供密码加密、校验等相关方法。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class PasswordUtil {
 

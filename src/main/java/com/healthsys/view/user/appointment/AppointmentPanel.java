@@ -9,10 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * 预约主面板
- * 组合预约表单组件和预约历史组件
+ * 用户预约面板。
+ * 展示和管理用户预约信息。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AppointmentPanel extends BasePanel {
 

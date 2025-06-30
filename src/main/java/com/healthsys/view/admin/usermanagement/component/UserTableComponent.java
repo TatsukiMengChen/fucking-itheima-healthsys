@@ -22,7 +22,9 @@ import java.util.function.Consumer;
 
 /**
  * 用户表格组件
- * 负责显示用户列表、搜索功能和基本操作按钮
+ * 展示用户列表，支持搜索、增删改等操作。
+ * 
+ * @author 梦辰
  */
 public class UserTableComponent extends JPanel {
 

@@ -12,10 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 数据访问管理器
- * 负责初始化MyBatis SqlSession和Mapper实例
+ * 数据访问管理器。
+ * 统一管理数据源和 Mapper 实例。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class DataAccessManager {
 

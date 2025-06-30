@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 配置测试工具类
- * 用于验证应用配置是否正确
+ * 配置测试工具类。
+ * 用于测试和验证系统配置。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class ConfigTestUtil {
 

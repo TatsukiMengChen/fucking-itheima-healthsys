@@ -23,10 +23,10 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 管理员预约管理ViewModel
- * 管理所有用户的预约记录，提供查看、状态更新等功能
+ * 管理员预约管理视图模型。
+ * 管理预约数据的加载与操作。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class AdminAppointmentViewModel extends BaseViewModel {
 

@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 健康跟踪ViewModel
- * 管理用于图表的数据、病史列表，并提供加载命令
+ * 用户健康跟踪视图模型。
+ * 负责健康跟踪数据的加载与交互。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class HealthTrackingViewModel extends BaseViewModel {
 

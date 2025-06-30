@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 图标工具类
- * 提供应用程序中使用的图标加载和管理功能
+ * 图标工具类。
+ * 提供应用程序中图标的加载和管理功能。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  * @since 1.0
  */
 public class IconUtil {

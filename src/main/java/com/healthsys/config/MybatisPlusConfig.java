@@ -14,10 +14,10 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 
 /**
- * MyBatis-Plus配置类
- * 负责配置MyBatis-Plus的各项功能
+ * MyBatis-Plus 配置类。
+ * 配置 MyBatis-Plus 相关参数。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 public class MybatisPlusConfig {
 

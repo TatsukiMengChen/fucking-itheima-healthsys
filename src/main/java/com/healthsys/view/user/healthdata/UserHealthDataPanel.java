@@ -15,10 +15,10 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * 用户健康数据管理面板
- * 重构后的简化版本，使用组件化设计
+ * 用户健康数据面板。
+ * 展示和管理用户健康数据。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class UserHealthDataPanel extends BasePanel {
 

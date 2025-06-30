@@ -7,10 +7,10 @@ import com.healthsys.model.entity.CheckItem;
 import java.util.List;
 
 /**
- * 检查组服务接口
- * 定义检查组的CRUD操作和业务逻辑方法
+ * 检查组服务接口。
+ * 定义体检分组相关的业务操作。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public interface ICheckGroupService {
 
@@ -119,7 +119,7 @@ public interface ICheckGroupService {
   /**
    * 更新检查组状态
    * 
-   * @param groupId  检查组ID
+   * @param groupId  棉查组ID
    * @param isActive 是否启用
    * @return 更新成功返回true，失败返回false
    */

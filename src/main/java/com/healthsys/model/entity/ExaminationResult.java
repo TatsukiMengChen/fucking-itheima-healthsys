@@ -8,10 +8,10 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 /**
- * 体检结果实体类
- * 对应数据库examination_results表
+ * 体检结果实体类。
+ * 存储用户体检的各项结果。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Data
 @NoArgsConstructor

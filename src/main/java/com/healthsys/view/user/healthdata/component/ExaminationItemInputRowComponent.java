@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * 检查项数据录入行组件
  * 显示单个检查项的录入界面：检查项名称、测量值输入、参考值显示、单位显示、备注输入
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class ExaminationItemInputRowComponent extends JPanel {
 

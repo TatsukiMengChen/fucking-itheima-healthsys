@@ -9,10 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 病史记录实体类
- * 对应数据库medical_history表
+ * 病史实体类。
+ * 记录用户的既往病史信息。
  * 
- * @author AI健康管理系统开发团队
+ * @author 梦辰
  */
 @Data
 @NoArgsConstructor

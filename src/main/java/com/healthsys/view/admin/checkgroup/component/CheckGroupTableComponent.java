@@ -30,10 +30,10 @@ import com.healthsys.view.common.PagingComponent;
 import com.healthsys.viewmodel.admin.checkgroup.CheckGroupManagementViewModel;
 
 /**
- * 检查组表格组件
- * 显示检查组列表，包含搜索框和操作按钮
+ * 检查组表格组件。
+ * 显示检查组列表，包含搜索框和操作按钮。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckGroupTableComponent extends JPanel implements PropertyChangeListener {
 

@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 病史服务实现类
+ * 病史服务实现。
+ * 实现用户病史相关的业务逻辑。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public class MedicalHistoryServiceImpl implements IMedicalHistoryService {
 

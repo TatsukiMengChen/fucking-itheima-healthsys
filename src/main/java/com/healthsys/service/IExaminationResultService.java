@@ -4,10 +4,10 @@ import com.healthsys.model.entity.ExaminationResult;
 import java.util.List;
 
 /**
- * 体检结果服务接口
- * 提供体检结果的相关业务逻辑
+ * 体检结果服务接口。
+ * 定义体检结果相关的业务操作。
  * 
- * @author AI Assistant
+ * @author 梦辰
  */
 public interface IExaminationResultService {
 

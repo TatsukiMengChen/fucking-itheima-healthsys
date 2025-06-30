@@ -20,10 +20,10 @@ import com.healthsys.viewmodel.base.BaseViewModel;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 检查组编辑ViewModel
- * 管理单个检查组实体的新建和编辑操作，包括检查项关联管理
+ * 检查组编辑视图模型。
+ * 支持体检分组的编辑与校验。
  * 
- * @author HealthSys Team
+ * @author 梦辰
  */
 public class CheckGroupEditViewModel extends BaseViewModel {
 
