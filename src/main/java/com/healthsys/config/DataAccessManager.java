@@ -3,6 +3,9 @@ package com.healthsys.config;
 import com.healthsys.dao.UserMapper;
 import com.healthsys.dao.CheckItemMapper;
 import com.healthsys.dao.CheckGroupMapper;
+import com.healthsys.dao.AppointmentMapper;
+import com.healthsys.dao.MedicalHistoryMapper;
+import com.healthsys.dao.ExaminationResultMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
@@ -96,6 +99,36 @@ public class DataAccessManager {
   }
 
   /**
+   * 获取AppointmentMapper实例
+   */
+  public AppointmentMapper getAppointmentMapper() {
+    if (sqlSession == null) {
+      throw new RuntimeException("SqlSession未初始化");
+    }
+    return sqlSession.getMapper(AppointmentMapper.class);
+  }
+
+  /**
+   * 获取MedicalHistoryMapper实例
+   */
+  public MedicalHistoryMapper getMedicalHistoryMapper() {
+    if (sqlSession == null) {
+      throw new RuntimeException("SqlSession未初始化");
+    }
+    return sqlSession.getMapper(MedicalHistoryMapper.class);
+  }
+
+  /**
+   * 获取ExaminationResultMapper实例
+   */
+  public ExaminationResultMapper getExaminationResultMapper() {
+    if (sqlSession == null) {
+      throw new RuntimeException("SqlSession未初始化");
+    }
+    return sqlSession.getMapper(ExaminationResultMapper.class);
+  }
+
+  /**
    * 获取SqlSession
    */
   public SqlSession getSqlSession() {
@@ -162,5 +195,17 @@ public class DataAccessManager {
 
   public static CheckGroupMapper getCheckGroupMapperStatic() {
     return getInstance().getCheckGroupMapper();
+  }
+
+  public static AppointmentMapper getAppointmentMapperStatic() {
+    return getInstance().getAppointmentMapper();
+  }
+
+  public static MedicalHistoryMapper getMedicalHistoryMapperStatic() {
+    return getInstance().getMedicalHistoryMapper();
+  }
+
+  public static ExaminationResultMapper getExaminationResultMapperStatic() {
+    return getInstance().getExaminationResultMapper();
   }
 }
